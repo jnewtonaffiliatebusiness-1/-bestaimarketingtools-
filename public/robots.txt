@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://bestaimarketingtools.com
+
+# Sitemaps
+Sitemap: https://bestaimarketingtools.com/sitemap.xml
