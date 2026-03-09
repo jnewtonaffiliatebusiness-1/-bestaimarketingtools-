@@ -80,8 +80,8 @@ export default function AboutPage() {
         <h2>Contact</h2>
         <p>
           For corrections, tool submissions, or partnership inquiries:{" "}
-          <Link href="mailto:editorial@bestaimarketingtools.com">
-            editorial@bestaimarketingtools.com
+          <Link href="mailto:editorial@aitoolsreviewshub.com">
+            editorial@aitoolsreviewshub.com
           </Link>
         </p>
       </div>

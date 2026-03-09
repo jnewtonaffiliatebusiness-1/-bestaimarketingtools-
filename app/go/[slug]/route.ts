@@ -13,7 +13,7 @@ export async function GET(
   }
 
   const url = new URL(base);
-  url.searchParams.set("utm_source", "bestaimarketingtools");
+  url.searchParams.set("utm_source", "aitoolsreviewshub");
   url.searchParams.set("utm_medium", "review");
   url.searchParams.set("utm_campaign", slug);
 

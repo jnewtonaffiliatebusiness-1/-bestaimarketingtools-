@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://bestaimarketingtools.com
+Host: https://aitoolsreviewshub.com
 
 # Sitemaps
-Sitemap: https://bestaimarketingtools.com/sitemap.xml
+Sitemap: https://aitoolsreviewshub.com/sitemap.xml

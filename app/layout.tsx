@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
   description:
     "100+ honest, unbiased reviews of AI marketing tools, email platforms, SEO tools, social media software, and CRM systems. Find the right tool for your business.",
-  metadataBase: new URL("https://bestaimarketingtools.com"),
+  metadataBase: new URL("https://aitoolsreviewshub.com"),
   openGraph: {
     siteName: "Best AI Marketing Tools",
     type: "website",
