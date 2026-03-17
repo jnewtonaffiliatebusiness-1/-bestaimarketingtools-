@@ -18,7 +18,7 @@ export default function HeroSection() {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-6 inline-block rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-400"
         >
-          100+ Honest Software Reviews — Updated 2025
+          100+ Trusted Software Reviews — Updated 2025
         </motion.div>
 
         <motion.h1
@@ -29,7 +29,7 @@ export default function HeroSection() {
         >
           The Internet&apos;s Most{" "}
           <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            Honest
+            Trusted
           </span>{" "}
           Software Reviews
         </motion.h1>
