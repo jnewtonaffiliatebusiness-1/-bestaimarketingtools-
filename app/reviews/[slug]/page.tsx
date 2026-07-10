@@ -4,6 +4,7 @@ import { getReviewBySlug, getAllReviewSlugs, type ReviewFrontmatter } from "@/li
 import { getCategoryBySlug } from "@/lib/categories";
 import ReviewHero from "@/components/review/ReviewHero";
 import BonfireTerminalCTA from "@/components/review/BonfireTerminalCTA";
+import EditorialTrust from "@/components/review/EditorialTrust";
 import Link from "next/link";
 
 interface Props {
@@ -175,6 +176,9 @@ export default async function ReviewPage({ params }: Props) {
             })}
           </span>
         </div>
+
+        {/* E-E-A-T + FTC trust strip — above the affiliate CTA */}
+        <EditorialTrust />
 
         {/* Review Hero: rating, verdict, pros/cons */}
         <ReviewHero frontmatter={fm} />
