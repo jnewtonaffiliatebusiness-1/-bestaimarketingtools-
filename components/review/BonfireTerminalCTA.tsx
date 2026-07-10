@@ -22,7 +22,7 @@ export default function BonfireTerminalCTA({
   testimonial,
   utmCampaign,
 }: Props) {
-  const bonfireUrl = `https://bonfireterminal.com?utm_source=reviewsite&utm_medium=review&utm_campaign=${utmCampaign}`;
+  const bonfireUrl = `https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=review&utm_campaign=${utmCampaign}`;
 
   return (
     <section className="mt-16 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-orange-600/5 p-8">

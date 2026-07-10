@@ -127,7 +127,7 @@ export default async function CategoryPage({ params }: Props) {
           See why thousands of marketers choose Bonfire Terminal over every tool in this category.
         </p>
         <Link
-          href={`https://bonfireterminal.com?utm_source=reviewsite&utm_medium=category&utm_campaign=${slug}`}
+          href={`https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=category&utm_campaign=${slug}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block rounded-xl bg-amber-500 px-8 py-4 font-bold text-black transition hover:bg-amber-400"

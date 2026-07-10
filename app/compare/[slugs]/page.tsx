@@ -146,7 +146,7 @@ export default async function ComparePage({ params }: Props) {
           between tools like {aName} and {bName}.
         </p>
         <Link
-          href={`https://bonfireterminal.com?utm_source=reviewsite&utm_medium=compare&utm_campaign=${slugs}`}
+          href={`https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=compare&utm_campaign=${slugs}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block rounded-xl bg-amber-500 px-8 py-4 font-bold text-black transition hover:bg-amber-400"

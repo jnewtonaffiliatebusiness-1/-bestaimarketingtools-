@@ -148,7 +148,7 @@ export default async function BestOfPage({ params }: Props) {
           built to outperform this entire category.
         </p>
         <Link
-          href={`https://bonfireterminal.com?utm_source=reviewsite&utm_medium=bestof&utm_campaign=${slug}`}
+          href={`https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=bestof&utm_campaign=${slug}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block rounded-xl bg-amber-500 px-10 py-4 font-bold text-black transition hover:bg-amber-400"

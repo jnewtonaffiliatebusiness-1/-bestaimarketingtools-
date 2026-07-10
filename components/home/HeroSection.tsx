@@ -58,7 +58,7 @@ export default function HeroSection() {
             Browse All Reviews
           </Link>
           <Link
-            href="https://bonfireterminal.com?utm_source=reviewsite&utm_medium=hero&utm_campaign=homepage"
+            href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=hero&utm_campaign=homepage"
             target="_blank"
             rel="noopener noreferrer"
             className="group relative rounded-xl bg-amber-500 px-8 py-4 font-bold text-black transition hover:bg-amber-400"

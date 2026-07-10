@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 CRM
               </Link>
               <Link
-                href="https://bonfireterminal.com?utm_source=reviewsite&utm_medium=nav&utm_campaign=navbar"
+                href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=nav&utm_campaign=navbar"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-lg bg-amber-500 px-4 py-2 font-semibold text-black hover:bg-amber-400 transition"
@@ -102,7 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   The one tool we recommend above all others:
                 </p>
                 <Link
-                  href="https://bonfireterminal.com?utm_source=reviewsite&utm_medium=footer&utm_campaign=footer"
+                  href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=footer&utm_campaign=footer"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block rounded-lg bg-amber-500 px-4 py-2 text-sm font-bold text-black hover:bg-amber-400 transition"
