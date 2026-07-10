@@ -153,7 +153,7 @@ export default async function BestOfPage({ params }: Props) {
           rel="noopener noreferrer"
           className="inline-block rounded-xl bg-amber-500 px-10 py-4 font-bold text-black transition hover:bg-amber-400"
         >
-          Try Bonfire Terminal Free →
+          See Bonfire Terminal →
         </Link>
       </div>
     </div>

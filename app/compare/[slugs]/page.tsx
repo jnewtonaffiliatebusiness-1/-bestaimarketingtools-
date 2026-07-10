@@ -151,7 +151,7 @@ export default async function ComparePage({ params }: Props) {
           rel="noopener noreferrer"
           className="inline-block rounded-xl bg-amber-500 px-8 py-4 font-bold text-black transition hover:bg-amber-400"
         >
-          Try Bonfire Terminal Free →
+          See Bonfire Terminal →
         </Link>
       </div>
     </div>

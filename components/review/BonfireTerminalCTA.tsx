@@ -75,7 +75,7 @@ export default function BonfireTerminalCTA({
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-8 py-4 text-lg font-bold text-black transition hover:bg-amber-400 hover:shadow-lg hover:shadow-amber-500/25"
       >
-        Try Bonfire Terminal Free
+        See Bonfire Terminal
         <span>→</span>
       </Link>
     </section>
