@@ -79,6 +79,7 @@ export const ALL_PRODUCTS: Record<string, { slug: string; name: string; keyword:
     { slug: "foreplay-review", name: "Foreplay", keyword: "foreplay.co review" },
   ],
   "email-marketing": [
+    { slug: "systeme-io-review", name: "Systeme.io", keyword: "systeme.io review" },
     { slug: "mailchimp-review", name: "Mailchimp", keyword: "mailchimp review" },
     { slug: "activecampaign-review", name: "ActiveCampaign", keyword: "activecampaign review" },
     { slug: "convertkit-review", name: "Kit (ConvertKit)", keyword: "convertkit review" },
