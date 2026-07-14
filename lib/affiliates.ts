@@ -125,3 +125,28 @@ export const AFFILIATE_URLS: Record<string, string> = {
 export function getAffiliateUrl(slug: string): string | null {
   return AFFILIATE_URLS[slug] ?? null;
 }
+
+/**
+ * A tool is "monetized" when its URL carries a tracking parameter — i.e. a real
+ * affiliate ID, not a raw brand URL. A raw URL still resolves, but earns $0.
+ *
+ * This is the gate for presell pages: sending paid or social traffic to a tool
+ * we earn nothing from is giving the traffic away. Add a tracked link to
+ * AFFILIATE_URLS above and its presell page appears automatically.
+ */
+const TRACKING_PARAMS = ["fp_ref", "sa", "via", "ref", "aff", "affiliate", "tap_a", "hop"];
+
+export function isMonetized(slug: string): boolean {
+  const url = AFFILIATE_URLS[slug];
+  if (!url) return false;
+  try {
+    const params = new URL(url).searchParams;
+    return TRACKING_PARAMS.some((p) => params.has(p));
+  } catch {
+    return false;
+  }
+}
+
+export function getMonetizedSlugs(): string[] {
+  return Object.keys(AFFILIATE_URLS).filter(isMonetized);
+}
