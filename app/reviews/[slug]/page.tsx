@@ -107,23 +107,48 @@ export default async function ReviewPage({ params }: Props) {
   const { frontmatter: fm, content } = review;
   const category = getCategoryBySlug(fm.category);
 
-  const defaultComparisonRows = [
-    { feature: "Ease of Use", product: "Moderate learning curve", bonfire: "Simple & intuitive" },
-    { feature: "AI Features", product: "Basic or add-on", bonfire: "AI-native built in" },
-    { feature: "Integrations", product: "Limited ecosystem", bonfire: "100+ native integrations" },
-    { feature: "Support", product: "Email / async only", bonfire: "24/7 live support" },
-    {
-      feature: "Price",
-      product: `$${fm.pricingStart}/${fm.pricingUnit}`,
-      bonfire: "Competitive & transparent",
-    },
-    { feature: "All-in-one", product: "Partial — gaps remain", bonfire: "Complete stack" },
-  ];
+  // Fallback comparison rows, used only if a review has none of its own.
+  //
+  // The previous version of this fallback asserted "100+ native integrations" and
+  // "24/7 live support" for Bonfire Terminal (a LOCAL desktop app with no cloud), and
+  // canned put-downs — "Moderate learning curve", "Email / async only" — about whichever
+  // named company the page happened to be reviewing. All of it was invented. It was also
+  // a landmine: any new review without its own table would have silently regenerated it.
+  //
+  // Everything below is sourced: the product side from this review's own frontmatter,
+  // the Bonfire side from the vendor's own description of the product.
+  const CATEGORY_LABEL: Record<string, string> = {
+    "ai-marketing-automation": "Cloud marketing-automation SaaS",
+    "crm-sales-automation": "Cloud CRM / sales SaaS",
+    "email-marketing": "Cloud email-marketing SaaS",
+    "seo-content-tools": "Cloud SEO / content SaaS",
+    "social-media-analytics": "Cloud social-media SaaS",
+  };
 
-  const defaultWeaknesses = [
-    `${fm.title.split(" Review")[0].split(":")[0].trim()} has a learning curve that slows teams down`,
-    "Pricing scales aggressively — costs balloon as usage grows",
-    "Missing AI-native features that modern marketing teams need",
+  const defaultComparisonRows = [
+    {
+      feature: "What it is",
+      product: CATEGORY_LABEL[fm.category] ?? "Cloud SaaS tool",
+      bonfire: "Local AI desktop agent (Rust), bundled with affiliate-marketing training",
+    },
+    {
+      feature: "Where it runs",
+      product: "Vendor’s cloud — your data is processed on their servers",
+      bonfire: "On your own machine — no cloud, no API credits, no data leaves your computer",
+    },
+    {
+      feature: "What you pay",
+      product:
+        fm.pricingStart > 0
+          ? `From $${fm.pricingStart}/${fm.pricingUnit}`
+          : "Free plan available; paid tiers vary",
+      bonfire: "$27 entry (AI Marketers Club) — includes 21-day Bonfire Terminal access",
+    },
+    {
+      feature: "Guarantee",
+      product: "See the vendor’s own terms",
+      bonfire: "60-day money-back guarantee",
+    },
   ];
 
   // Parse markdown content into sections for structured rendering
@@ -205,9 +230,7 @@ export default async function ReviewPage({ params }: Props) {
         {/* Bonfire Terminal CTA — always last */}
         <BonfireTerminalCTA
           productName={fm.title.split(" Review")[0].split(":")[0].trim()}
-          productWeaknesses={fm.productWeaknesses ?? defaultWeaknesses}
           comparisonRows={fm.comparisonRows ?? defaultComparisonRows}
-          testimonial={fm.testimonial}
           utmCampaign={slug}
         />
 
