@@ -32,9 +32,8 @@ export const AFFILIATE_URLS: Record<string, string> = {
   "foreplay-review":        "https://foreplay.co",
 
   // ─── Email Marketing ──────────────────────────────────────────────────────
-  // TODO(JZooLU): replace with the tracked Systeme.io affiliate link (60% lifetime recurring).
-  // Until then this earns $0 — the raw URL is a placeholder so the CTA still resolves.
-  "systeme-io-review":        "https://systeme.io",
+  // Systeme.io: 60% lifetime recurring. Lifetime cookie — the referral stays tagged to us.
+  "systeme-io-review":        "https://systeme.io/?sa=sa0275305417aeb2a342c03d32dcbb6d878ce2e94f",
   "mailchimp-review":         "https://mailchimp.com",
   "activecampaign-review":    "https://www.activecampaign.com",
   "convertkit-review":        "https://kit.com",
