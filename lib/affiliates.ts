@@ -32,6 +32,9 @@ export const AFFILIATE_URLS: Record<string, string> = {
   "foreplay-review":        "https://foreplay.co",
 
   // ─── Email Marketing ──────────────────────────────────────────────────────
+  // TODO(JZooLU): replace with the tracked Systeme.io affiliate link (60% lifetime recurring).
+  // Until then this earns $0 — the raw URL is a placeholder so the CTA still resolves.
+  "systeme-io-review":        "https://systeme.io",
   "mailchimp-review":         "https://mailchimp.com",
   "activecampaign-review":    "https://www.activecampaign.com",
   "convertkit-review":        "https://kit.com",
@@ -99,7 +102,7 @@ export const AFFILIATE_URLS: Record<string, string> = {
 
   // ─── CRM & Sales Automation ───────────────────────────────────────────────
   "hubspot-crm-review":           "https://www.hubspot.com/products/crm",
-  "gohighlevel-review":           "https://www.gohighlevel.com",
+  "gohighlevel-review":           "https://www.gohighlevel.com/?fp_ref=jzoolu",
   "pipedrive-review":             "https://www.pipedrive.com",
   "close-crm-review":             "https://www.close.com",
   "salesforce-review":            "https://www.salesforce.com",
