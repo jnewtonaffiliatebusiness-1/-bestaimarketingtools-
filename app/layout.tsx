@@ -30,33 +30,33 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-gray-950 text-white antialiased">
-        <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-gray-950/80 backdrop-blur-md">
+      <body className="bg-[#f7f6f2] text-[#1a1a1a] antialiased">
+        <header className="fixed top-0 z-50 w-full border-b border-[#e6e2da] bg-[#f7f6f2]/90 backdrop-blur-md">
           <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-            <Link href="/" className="font-black text-xl text-white hover:text-amber-400 transition">
-              Best<span className="text-amber-400">AI</span>MarketingTools
+            <Link href="/" className="font-black text-xl text-[#1a1a1a] hover:text-[#b8460f] transition">
+              Best<span className="text-[#b8460f]">AI</span>MarketingTools
             </Link>
             <div className="hidden items-center gap-6 text-sm md:flex">
-              <Link href="/reviews" className="text-gray-400 hover:text-white transition">
+              <Link href="/reviews" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 All Reviews
               </Link>
-              <Link href="/category/ai-marketing-automation" className="text-gray-400 hover:text-white transition">
+              <Link href="/category/ai-marketing-automation" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 AI Tools
               </Link>
-              <Link href="/category/email-marketing" className="text-gray-400 hover:text-white transition">
+              <Link href="/category/email-marketing" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 Email
               </Link>
-              <Link href="/category/seo-content-tools" className="text-gray-400 hover:text-white transition">
+              <Link href="/category/seo-content-tools" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 SEO
               </Link>
-              <Link href="/category/crm-sales-automation" className="text-gray-400 hover:text-white transition">
+              <Link href="/category/crm-sales-automation" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 CRM
               </Link>
               <Link
                 href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=nav&utm_campaign=navbar"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-amber-500 px-4 py-2 font-semibold text-black hover:bg-amber-400 transition"
+                className="rounded-lg bg-[#b8460f] px-4 py-2 font-semibold text-white hover:bg-[#9e3c0d] transition"
               >
                 Bonfire Terminal
               </Link>
@@ -66,52 +66,52 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <main className="pt-16">{children}</main>
 
-        <footer className="border-t border-white/10 bg-gray-950 py-12">
+        <footer className="border-t border-[#e6e2da] bg-[#f7f6f2] py-12">
           <div className="mx-auto max-w-6xl px-4">
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
               <div>
-                <h4 className="mb-4 font-semibold text-white">Categories</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li><Link href="/category/ai-marketing-automation" className="hover:text-white transition">AI Marketing</Link></li>
-                  <li><Link href="/category/email-marketing" className="hover:text-white transition">Email Marketing</Link></li>
-                  <li><Link href="/category/seo-content-tools" className="hover:text-white transition">SEO Tools</Link></li>
-                  <li><Link href="/category/social-media-analytics" className="hover:text-white transition">Social Media</Link></li>
-                  <li><Link href="/category/crm-sales-automation" className="hover:text-white transition">CRM & Sales</Link></li>
+                <h4 className="mb-4 font-semibold text-[#1a1a1a]">Categories</h4>
+                <ul className="space-y-2 text-sm text-[#55514a]">
+                  <li><Link href="/category/ai-marketing-automation" className="hover:text-[#1a1a1a] transition">AI Marketing</Link></li>
+                  <li><Link href="/category/email-marketing" className="hover:text-[#1a1a1a] transition">Email Marketing</Link></li>
+                  <li><Link href="/category/seo-content-tools" className="hover:text-[#1a1a1a] transition">SEO Tools</Link></li>
+                  <li><Link href="/category/social-media-analytics" className="hover:text-[#1a1a1a] transition">Social Media</Link></li>
+                  <li><Link href="/category/crm-sales-automation" className="hover:text-[#1a1a1a] transition">CRM & Sales</Link></li>
                 </ul>
               </div>
               <div>
-                <h4 className="mb-4 font-semibold text-white">Best Of</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li><Link href="/best/best-ai-marketing-tools" className="hover:text-white transition">Best AI Tools</Link></li>
-                  <li><Link href="/best/best-email-marketing-platforms" className="hover:text-white transition">Best Email Platforms</Link></li>
-                  <li><Link href="/best/best-seo-tools" className="hover:text-white transition">Best SEO Tools</Link></li>
-                  <li><Link href="/best/best-crm-tools" className="hover:text-white transition">Best CRM Tools</Link></li>
+                <h4 className="mb-4 font-semibold text-[#1a1a1a]">Best Of</h4>
+                <ul className="space-y-2 text-sm text-[#55514a]">
+                  <li><Link href="/best/best-ai-marketing-tools" className="hover:text-[#1a1a1a] transition">Best AI Tools</Link></li>
+                  <li><Link href="/best/best-email-marketing-platforms" className="hover:text-[#1a1a1a] transition">Best Email Platforms</Link></li>
+                  <li><Link href="/best/best-seo-tools" className="hover:text-[#1a1a1a] transition">Best SEO Tools</Link></li>
+                  <li><Link href="/best/best-crm-tools" className="hover:text-[#1a1a1a] transition">Best CRM Tools</Link></li>
                 </ul>
               </div>
               <div>
-                <h4 className="mb-4 font-semibold text-white">Site</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li><Link href="/reviews" className="hover:text-white transition">All Reviews</Link></li>
-                  <li><Link href="/blog" className="hover:text-white transition">Blog</Link></li>
-                  <li><Link href="/about" className="hover:text-white transition">About & Methodology</Link></li>
+                <h4 className="mb-4 font-semibold text-[#1a1a1a]">Site</h4>
+                <ul className="space-y-2 text-sm text-[#55514a]">
+                  <li><Link href="/reviews" className="hover:text-[#1a1a1a] transition">All Reviews</Link></li>
+                  <li><Link href="/blog" className="hover:text-[#1a1a1a] transition">Blog</Link></li>
+                  <li><Link href="/about" className="hover:text-[#1a1a1a] transition">About & Methodology</Link></li>
                 </ul>
               </div>
               <div>
-                <h4 className="mb-4 font-semibold text-white">Our Pick</h4>
-                <p className="mb-3 text-sm text-gray-400">
+                <h4 className="mb-4 font-semibold text-[#1a1a1a]">Our Pick</h4>
+                <p className="mb-3 text-sm text-[#55514a]">
                   The one tool we recommend above all others:
                 </p>
                 <Link
                   href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=footer&utm_campaign=footer"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block rounded-lg bg-amber-500 px-4 py-2 text-sm font-bold text-black hover:bg-amber-400 transition"
+                  className="inline-block rounded-lg bg-[#b8460f] px-4 py-2 text-sm font-bold text-white hover:bg-[#9e3c0d] transition"
                 >
                   Try Bonfire Terminal →
                 </Link>
               </div>
             </div>
-            <div className="mt-8 border-t border-white/5 pt-8 text-center text-xs text-gray-600">
+            <div className="mt-8 border-t border-[#e6e2da] pt-8 text-center text-xs text-[#8a857c]">
               <p>
                 Some links on this site are affiliate links. We may earn a commission at no extra cost to you.
                 This does not influence our editorial opinions.

@@ -18,10 +18,10 @@ export default function StarRating({ rating, max = 5, size = "md", showValue = t
           const partial = !filled && i < rating;
           return (
             <span key={i} className="relative inline-block">
-              <span className="text-gray-600">★</span>
+              <span className="text-[#8a857c]">★</span>
               {(filled || partial) && (
                 <span
-                  className="absolute inset-0 overflow-hidden text-amber-400"
+                  className="absolute inset-0 overflow-hidden text-[#b8460f]"
                   style={{ width: filled ? "100%" : `${(rating % 1) * 100}%` }}
                 >
                   ★
@@ -32,8 +32,8 @@ export default function StarRating({ rating, max = 5, size = "md", showValue = t
         })}
       </div>
       {showValue && (
-        <span className="font-semibold text-white">
-          {rating.toFixed(1)}<span className="text-gray-400">/{max}</span>
+        <span className="font-semibold text-[#1a1a1a]">
+          {rating.toFixed(1)}<span className="text-[#55514a]">/{max}</span>
         </span>
       )}
     </div>

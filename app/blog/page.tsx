@@ -70,8 +70,8 @@ export default function BlogPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
       <div className="mb-10">
-        <h1 className="mb-3 text-4xl font-black text-white">Blog</h1>
-        <p className="text-gray-400">
+        <h1 className="mb-3 text-4xl font-black text-[#1a1a1a]">Blog</h1>
+        <p className="text-[#55514a]">
           Strategy guides, tool comparisons, and deep-dives on marketing software.
         </p>
       </div>
@@ -81,13 +81,13 @@ export default function BlogPage() {
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group block rounded-xl border border-white/10 bg-white/5 p-6 transition hover:border-amber-500/30 hover:bg-white/8"
+            className="group block rounded-xl border border-[#e6e2da] bg-white p-6 transition hover:border-[#1b3a6b]/40 hover:bg-[#eef1f6]"
           >
             <div className="mb-2 flex items-center gap-3">
-              <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-gray-400">
+              <span className="rounded-full bg-[#eef1f6] px-2 py-0.5 text-xs text-[#55514a]">
                 {post.category}
               </span>
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-[#8a857c]">
                 {new Date(post.date).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -95,11 +95,11 @@ export default function BlogPage() {
                 })}
               </span>
             </div>
-            <h2 className="mb-2 text-xl font-bold text-white group-hover:text-amber-400 transition">
+            <h2 className="mb-2 text-xl font-bold text-[#1a1a1a] group-hover:text-[#b8460f] transition">
               {post.title}
             </h2>
-            <p className="text-gray-400">{post.desc}</p>
-            <p className="mt-3 text-sm text-amber-500 group-hover:text-amber-400 transition">
+            <p className="text-[#55514a]">{post.desc}</p>
+            <p className="mt-3 text-sm text-[#b8460f] group-hover:text-[#b8460f] transition">
               Read article →
             </p>
           </Link>

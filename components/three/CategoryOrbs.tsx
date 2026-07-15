@@ -46,7 +46,7 @@ function Orb({ orb }: { orb: typeof ORBS[0] }) {
       />
       {hovered && (
         <Html center distanceFactor={6}>
-          <div className="pointer-events-none whitespace-nowrap rounded-md bg-black/80 px-2 py-1 text-xs text-white backdrop-blur">
+          <div className="pointer-events-none whitespace-nowrap rounded-md bg-black/80 px-2 py-1 text-xs text-[#1a1a1a] backdrop-blur">
             {orb.name}
           </div>
         </Html>

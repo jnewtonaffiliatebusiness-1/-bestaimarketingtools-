@@ -24,7 +24,7 @@ export default function EmailCapture() {
   }
 
   return (
-    <section className="relative z-10 bg-gray-900 py-20">
+    <section className="relative z-10 bg-[#eef1f6] py-20">
       <div className="mx-auto max-w-2xl px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -33,10 +33,10 @@ export default function EmailCapture() {
           transition={{ duration: 0.6 }}
         >
           <div className="mb-4 text-5xl">🔥</div>
-          <h2 className="mb-4 text-3xl font-bold text-white">
+          <h2 className="mb-4 text-3xl font-bold text-[#1a1a1a]">
             Get the 2025 AI Marketing Stack Cheat Sheet
           </h2>
-          <p className="mb-8 text-gray-400">
+          <p className="mb-8 text-[#55514a]">
             Free PDF: the exact tools stack top marketers use in 2025, with pricing
             comparisons and our top recommendations. No spam, ever.
           </p>
@@ -55,12 +55,12 @@ export default function EmailCapture() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
-                className="flex-1 rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-white placeholder-gray-500 outline-none focus:border-amber-500/50"
+                className="flex-1 rounded-xl border border-[#e6e2da] bg-white px-5 py-4 text-[#1a1a1a] placeholder-gray-500 outline-none focus:border-amber-500/50"
               />
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="rounded-xl bg-amber-500 px-8 py-4 font-bold text-black transition hover:bg-amber-400 disabled:opacity-50"
+                className="rounded-xl bg-[#b8460f] px-8 py-4 font-bold text-white transition hover:bg-[#9e3c0d] disabled:opacity-50"
               >
                 {status === "loading" ? "Sending..." : "Get Free PDF →"}
               </button>
@@ -73,7 +73,7 @@ export default function EmailCapture() {
             </p>
           )}
 
-          <p className="mt-4 text-xs text-gray-600">
+          <p className="mt-4 text-xs text-[#8a857c]">
             No spam. Unsubscribe anytime. We hate newsletters as much as you do.
           </p>
         </motion.div>

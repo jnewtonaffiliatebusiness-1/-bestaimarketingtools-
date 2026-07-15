@@ -41,8 +41,8 @@ export default function ReviewsClient({ reviews }: Props) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <div className="mb-10">
-        <h1 className="mb-2 text-4xl font-black text-white">All Reviews</h1>
-        <p className="text-gray-400">
+        <h1 className="mb-2 text-4xl font-black text-[#1a1a1a]">All Reviews</h1>
+        <p className="text-[#55514a]">
           {reviews.length} honest reviews across 5 categories. No BS, no paid placements.
         </p>
       </div>
@@ -54,12 +54,12 @@ export default function ReviewsClient({ reviews }: Props) {
           placeholder="Search reviews..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-amber-500/50"
+          className="flex-1 rounded-xl border border-[#e6e2da] bg-white px-4 py-3 text-[#1a1a1a] placeholder-gray-500 outline-none focus:border-amber-500/50"
         />
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="rounded-xl border border-white/10 bg-gray-900 px-4 py-3 text-gray-300 outline-none focus:border-amber-500/50"
+          className="rounded-xl border border-[#e6e2da] bg-[#eef1f6] px-4 py-3 text-[#55514a] outline-none focus:border-amber-500/50"
         >
           <option value="all">All Categories</option>
           {CATEGORIES.map((c) => (
@@ -71,7 +71,7 @@ export default function ReviewsClient({ reviews }: Props) {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          className="rounded-xl border border-white/10 bg-gray-900 px-4 py-3 text-gray-300 outline-none focus:border-amber-500/50"
+          className="rounded-xl border border-[#e6e2da] bg-[#eef1f6] px-4 py-3 text-[#55514a] outline-none focus:border-amber-500/50"
         >
           <option value="date">Newest</option>
           <option value="rating">Highest Rated</option>
@@ -79,7 +79,7 @@ export default function ReviewsClient({ reviews }: Props) {
         </select>
       </div>
 
-      <p className="mb-6 text-sm text-gray-500">
+      <p className="mb-6 text-sm text-[#8a857c]">
         Showing {filtered.length} of {reviews.length} reviews
       </p>
 
@@ -88,21 +88,21 @@ export default function ReviewsClient({ reviews }: Props) {
           <Link
             key={review.frontmatter.slug}
             href={`/reviews/${review.frontmatter.slug}`}
-            className="group block rounded-xl border border-white/10 bg-white/5 p-5 transition hover:border-amber-500/30 hover:bg-white/10"
+            className="group block rounded-xl border border-[#e6e2da] bg-white p-5 transition hover:border-[#1b3a6b]/40 hover:bg-[#eef1f6]"
           >
             <div className="mb-2 flex items-center justify-between">
-              <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-gray-400 capitalize">
+              <span className="rounded-full bg-[#eef1f6] px-2 py-0.5 text-xs text-[#55514a] capitalize">
                 {review.frontmatter.category.replace(/-/g, " ")}
               </span>
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-[#8a857c]">
                 ${review.frontmatter.pricingStart}/{review.frontmatter.pricingUnit}
               </span>
             </div>
-            <h3 className="mb-2 text-sm font-bold leading-snug text-white group-hover:text-amber-400 transition">
+            <h3 className="mb-2 text-sm font-bold leading-snug text-[#1a1a1a] group-hover:text-[#b8460f] transition">
               {review.frontmatter.title.split(":")[0]}
             </h3>
             <StarRating rating={review.frontmatter.rating} size="sm" />
-            <p className="mt-2 line-clamp-2 text-xs text-gray-500">
+            <p className="mt-2 line-clamp-2 text-xs text-[#8a857c]">
               {review.frontmatter.verdict}
             </p>
           </Link>
@@ -110,7 +110,7 @@ export default function ReviewsClient({ reviews }: Props) {
       </div>
 
       {filtered.length === 0 && (
-        <div className="py-20 text-center text-gray-500">
+        <div className="py-20 text-center text-[#8a857c]">
           No reviews match your filters.
         </div>
       )}

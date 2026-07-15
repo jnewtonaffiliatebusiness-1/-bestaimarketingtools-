@@ -10,7 +10,7 @@ export default function ProsConsList({ pros, cons }: Props) {
         <h3 className="mb-3 font-semibold text-emerald-400">Pros</h3>
         <ul className="space-y-2">
           {pros.map((pro, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+            <li key={i} className="flex items-start gap-2 text-sm text-[#55514a]">
               <span className="mt-0.5 text-emerald-400">✓</span>
               {pro}
             </li>
@@ -21,7 +21,7 @@ export default function ProsConsList({ pros, cons }: Props) {
         <h3 className="mb-3 font-semibold text-red-400">Cons</h3>
         <ul className="space-y-2">
           {cons.map((con, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+            <li key={i} className="flex items-start gap-2 text-sm text-[#55514a]">
               <span className="mt-0.5 text-red-400">✗</span>
               {con}
             </li>

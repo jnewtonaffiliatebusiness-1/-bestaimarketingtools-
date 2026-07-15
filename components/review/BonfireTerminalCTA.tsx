@@ -38,26 +38,26 @@ export default function BonfireTerminalCTA({
   const bonfireUrl = `https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=review&utm_campaign=${utmCampaign}`;
 
   return (
-    <section className="mt-16 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-orange-600/5 p-8">
+    <section className="mt-16 rounded-2xl border border-[#1b3a6b]/40 bg-[#eef1f6] p-8">
       {/* FTC: label the placement before any selling, not in a footer. */}
-      <div className="mb-3 inline-block rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-400">
+      <div className="mb-3 inline-block rounded-full bg-[#eef1f6] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#b8460f]">
         Sponsored · affiliate link
       </div>
 
-      <h2 className="mb-4 text-2xl font-bold text-white md:text-3xl">
+      <h2 className="mb-4 text-2xl font-bold text-[#1a1a1a] md:text-3xl">
         A different approach: Bonfire Terminal
       </h2>
 
-      <p className="mb-4 text-gray-300">
+      <p className="mb-4 text-[#55514a]">
         {productName} runs in the vendor&apos;s cloud — your data is processed on their
         servers, and you pay every month for as long as you use it. Bonfire Terminal is a
         different kind of tool: an AI agent that runs as a{" "}
-        <strong className="text-white">desktop app on your own machine</strong>. No cloud, no
+        <strong className="text-[#1a1a1a]">desktop app on your own machine</strong>. No cloud, no
         API credits, and nothing you type leaves your computer.
       </p>
 
-      <p className="mb-6 text-sm text-gray-400">
-        <strong className="text-gray-300">To be straight with you:</strong> it is not a
+      <p className="mb-6 text-sm text-[#55514a]">
+        <strong className="text-[#55514a]">To be straight with you:</strong> it is not a
         drop-in replacement for {productName}, and we are not going to pretend it is — they
         do different jobs. It is worth a look if the cloud-subscription model itself is what
         you want out of, or if you want an AI agent that works privately and offline. If
@@ -74,13 +74,13 @@ export default function BonfireTerminalCTA({
         href={bonfireUrl}
         target="_blank"
         rel="sponsored nofollow noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-8 py-4 text-lg font-bold text-black transition hover:bg-amber-400 hover:shadow-lg hover:shadow-amber-500/25"
+        className="inline-flex items-center gap-2 rounded-xl bg-[#b8460f] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#9e3c0d] hover:shadow-lg hover:shadow-amber-500/25"
       >
         See what Bonfire Terminal is
         <span>→</span>
       </Link>
 
-      <p className="mt-4 text-xs leading-relaxed text-gray-500">
+      <p className="mt-4 text-xs leading-relaxed text-[#8a857c]">
         Bonfire Terminal access is included with the AI Marketers Club ($27 entry, which
         includes 21 days of access; the club also sells higher-priced products). We earn a
         commission if you buy through this link, at no extra cost to you — which is exactly

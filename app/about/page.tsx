@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-6 text-4xl font-black text-white">About & Methodology</h1>
+      <h1 className="mb-6 text-4xl font-black text-[#1a1a1a]">About & Methodology</h1>
 
-      <div className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-amber-400">
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:text-[#1a1a1a] prose-p:text-[#55514a] prose-a:text-[#b8460f]">
         <h2>Who We Are</h2>
         <p>
           Best AI Marketing Tools is an independent review publication focused on helping

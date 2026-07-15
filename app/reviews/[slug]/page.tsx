@@ -160,29 +160,29 @@ export default async function ReviewPage({ params }: Props) {
 
       <article className="mx-auto max-w-4xl px-4 py-12">
         {/* Breadcrumb */}
-        <nav className="mb-6 text-sm text-gray-500">
-          <Link href="/" className="hover:text-white transition">Home</Link>
+        <nav className="mb-6 text-sm text-[#8a857c]">
+          <Link href="/" className="hover:text-[#1a1a1a] transition">Home</Link>
           <span className="mx-2">/</span>
-          <Link href="/reviews" className="hover:text-white transition">Reviews</Link>
+          <Link href="/reviews" className="hover:text-[#1a1a1a] transition">Reviews</Link>
           {category && (
             <>
               <span className="mx-2">/</span>
-              <Link href={`/category/${category.slug}`} className="hover:text-white transition">
+              <Link href={`/category/${category.slug}`} className="hover:text-[#1a1a1a] transition">
                 {category.name}
               </Link>
             </>
           )}
           <span className="mx-2">/</span>
-          <span className="text-gray-400">{fm.title.split(":")[0]}</span>
+          <span className="text-[#55514a]">{fm.title.split(":")[0]}</span>
         </nav>
 
         {/* Title */}
-        <h1 className="mb-6 text-3xl font-black text-white md:text-5xl leading-tight">
+        <h1 className="mb-6 text-3xl font-black text-[#1a1a1a] md:text-5xl leading-tight">
           {fm.title}
         </h1>
 
         {/* Meta */}
-        <div className="mb-8 flex flex-wrap gap-4 text-sm text-gray-500">
+        <div className="mb-8 flex flex-wrap gap-4 text-sm text-[#8a857c]">
           <span>By {fm.author}</span>
           <span>
             Published:{" "}
@@ -209,7 +209,7 @@ export default async function ReviewPage({ params }: Props) {
         <ReviewHero frontmatter={fm} />
 
         {/* Structured content sections */}
-        <div className="mt-12 space-y-8 text-gray-300">
+        <div className="mt-12 space-y-8 text-[#55514a]">
           {sections.map((section, i) => {
             const lines = section.split("\n");
             const heading = lines[0].replace(/\n$/, "");
@@ -217,7 +217,7 @@ export default async function ReviewPage({ params }: Props) {
 
             return (
               <section key={i}>
-                <h2 className="mb-4 text-2xl font-bold text-white">{heading}</h2>
+                <h2 className="mb-4 text-2xl font-bold text-[#1a1a1a]">{heading}</h2>
                 <div
                   className="prose-content leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: mdToHtml(body) }}
@@ -236,11 +236,11 @@ export default async function ReviewPage({ params }: Props) {
 
         {/* Related navigation */}
         {category && (
-          <div className="mt-12 border-t border-white/10 pt-8">
-            <p className="mb-4 text-sm text-gray-500">More reviews in {category.name}:</p>
+          <div className="mt-12 border-t border-[#e6e2da] pt-8">
+            <p className="mb-4 text-sm text-[#8a857c]">More reviews in {category.name}:</p>
             <Link
               href={`/category/${category.slug}`}
-              className="text-amber-400 hover:text-amber-300 transition text-sm"
+              className="text-[#b8460f] hover:text-[#b8460f] transition text-sm"
             >
               View all {category.productCount} {category.name} reviews →
             </Link>
