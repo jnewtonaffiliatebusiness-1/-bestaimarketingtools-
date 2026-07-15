@@ -97,9 +97,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </ul>
               </div>
               <div>
-                <h4 className="mb-4 font-semibold text-[#1a1a1a]">Our Pick</h4>
+                <h4 className="mb-4 font-semibold text-[#1a1a1a]">Sponsored</h4>
                 <p className="mb-3 text-sm text-[#55514a]">
-                  The one tool we recommend above all others:
+                  An affiliate partner we work with:
                 </p>
                 <Link
                   href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=footer&utm_campaign=footer"

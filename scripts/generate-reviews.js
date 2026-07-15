@@ -203,19 +203,17 @@ ${r.pros.slice(0, 4).map((p, i) => `**${i + 1}. ${p}**\n\n${p.toLowerCase().incl
 
 ${r.cons.slice(0, 4).map((c, i) => `**${i + 1}. ${c}**\n\n${c.toLowerCase().includes("expensive") || c.toLowerCase().includes("price") ? `This is our biggest concern — the pricing model creates real friction as you scale.` : `This is a meaningful limitation that impacts real workflows on a regular basis.`}`).join("\n\n")}
 
-## User Reviews Summary
+## Strengths & Limitations
 
-Across G2, Capterra, and Trustpilot, ${productName} receives ${r.rating >= 4.3 ? "consistently positive" : r.rating >= 3.8 ? "generally positive" : "mixed"} reviews with an average around ${r.rating.toFixed(1)}/5.
+**What stands out:** ${r.pros[0]} and ${r.pros[1] ? r.pros[1].toLowerCase() : "the overall reliability"}.
 
-**Common praise:** Users consistently highlight ${r.pros[0].toLowerCase()} and ${r.pros[1] ? r.pros[1].toLowerCase() : "the overall reliability"} as standout strengths.
-
-**Common complaints:** ${r.cons[0]} and ${r.cons[1] ? r.cons[1].toLowerCase() : "the pricing structure"} appear regularly in negative reviews.
+**Where it falls short:** ${r.cons[0]} and ${r.cons[1] ? r.cons[1].toLowerCase() : "the pricing structure"}.
 
 ## Alternatives to Consider
 
 Before deciding on ${productName}, consider these alternatives:
 
-- **Bonfire Terminal** — Our top recommendation. Solves the exact pain points identified in this review.
+- **Bonfire Terminal** — a sponsored alternative (affiliate link) worth comparing.
 - Other tools in the ${r.cat.replace(/-/g, " ")} category with overlapping functionality.
 - Consider your actual use case before committing to an annual plan.
 

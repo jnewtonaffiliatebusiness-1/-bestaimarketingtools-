@@ -39,8 +39,8 @@ export default function HeroSection() {
           transition={{ delay: 0.5, duration: 0.8 }}
         >
           100+ unbiased reviews of AI marketing, email, SEO, social, and CRM tools.
-          Find the right tool — or discover why{" "}
-          <span className="text-[#b8460f]">Bonfire Terminal</span> beats them all.
+          Find the right tool for your workflow — or see how{" "}
+          <span className="text-[#b8460f]">Bonfire Terminal</span> compares.
         </motion.p>
 
         <motion.div
