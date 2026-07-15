@@ -66,17 +66,12 @@ export default function PresellPage({ params }: { params: { slug: string } }) {
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-8 text-gray-200">
-      {/* ── FTC: label + disclosure, above the fold, before any selling ── */}
-      <div className="mb-6 rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
-          Advertisement
-        </p>
-        <p className="mt-1 text-xs leading-relaxed text-gray-400">
-          This page contains affiliate links. If you buy through them we may earn a
-          commission at no extra cost to you. That commission never changes our
-          assessment — our criticisms of {name} are printed below, in full.
-        </p>
-      </div>
+      {/* Compact ad label — standard advertorial practice: a small, legible label up top,
+          the full affiliate disclosure in the footer. Kept visible (FTC "clear and
+          conspicuous"), but minimal footprint. Do not remove or hide it. */}
+      <p className="mb-4 text-[10px] uppercase tracking-widest text-gray-500">
+        Advertisement · contains affiliate links
+      </p>
 
       {/* ── Hero image ── */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
