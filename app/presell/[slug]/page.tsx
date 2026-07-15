@@ -34,10 +34,16 @@ export function generateMetadata({
   const review = getReviewBySlug(params.slug);
   if (!review) return {};
   const { title } = review.frontmatter;
+  const hero = `/images/presell/${params.slug}.png`;
   return {
     title,
     description: review.frontmatter.metaDescription,
     robots: { index: false, follow: false },
+    openGraph: {
+      title,
+      description: review.frontmatter.metaDescription,
+      images: [{ url: hero, width: 1200, height: 630 }],
+    },
   };
 }
 
@@ -71,6 +77,16 @@ export default function PresellPage({ params }: { params: { slug: string } }) {
           assessment — our criticisms of {name} are printed below, in full.
         </p>
       </div>
+
+      {/* ── Hero image ── */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={`/images/presell/${params.slug}.png`}
+        alt={`${name} — honest review`}
+        width={1200}
+        height={630}
+        className="mb-8 w-full rounded-2xl border border-white/10"
+      />
 
       {/* ── Hook ── */}
       <article>
