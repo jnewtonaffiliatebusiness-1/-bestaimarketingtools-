@@ -1,10 +1,12 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || "https://aitoolsreviewshub.com",
+  siteUrl: process.env.SITE_URL || "https://www.aitoolsreviewshub.com",
   generateRobotsTxt: true,
   changefreq: "weekly",
   priority: 0.7,
   sitemapSize: 5000,
+  // Keep non-page routes out of the sitemap (e.g. the /api/comparison-sheet endpoint).
+  exclude: ["/api/*"],
   robotsTxtOptions: {
     policies: [
       { userAgent: "*", allow: "/" },
