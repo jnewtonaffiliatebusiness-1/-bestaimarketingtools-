@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
-import { getReviewBySlug, getAllReviewSlugs, type ReviewFrontmatter } from "@/lib/reviews";
+import { getReviewBySlug, getAllReviewSlugs, getReviewsByCategory, type ReviewFrontmatter } from "@/lib/reviews";
 import { getCategoryBySlug } from "@/lib/categories";
 import ReviewHero from "@/components/review/ReviewHero";
 import BonfireTerminalCTA from "@/components/review/BonfireTerminalCTA";
@@ -102,10 +102,20 @@ function mdToHtml(md: string): string {
 export default async function ReviewPage({ params }: Props) {
   const { slug } = params;
   const review = getReviewBySlug(slug);
-  if (!review) notFound();
+  if (!review) {
+    // Google indexed old, suffix-less URLs (e.g. /reviews/activecampaign) from before the slug
+    // format gained the "-review" suffix. 308-redirect those to the real page instead of 404ing.
+    if (!slug.endsWith("-review") && getReviewBySlug(`${slug}-review`)) {
+      permanentRedirect(`/reviews/${slug}-review`);
+    }
+    notFound();
+  }
 
   const { frontmatter: fm, content } = review;
   const category = getCategoryBySlug(fm.category);
+  const related = getReviewsByCategory(fm.category)
+    .filter((r) => r.frontmatter.slug !== fm.slug)
+    .slice(0, 6);
 
   // Fallback comparison rows, used only if a review has none of its own.
   //
@@ -234,16 +244,32 @@ export default async function ReviewPage({ params }: Props) {
           utmCampaign={slug}
         />
 
-        {/* Related navigation */}
-        {category && (
+        {/* Related reviews — internal links to sibling reviews (crawl depth + UX) */}
+        {related.length > 0 && (
           <div className="mt-12 border-t border-[#e6e2da] pt-8">
-            <p className="mb-4 text-sm text-[#8a857c]">More reviews in {category.name}:</p>
-            <Link
-              href={`/category/${category.slug}`}
-              className="text-[#b8460f] hover:text-[#b8460f] transition text-sm"
-            >
-              View all {category.productCount} {category.name} reviews →
-            </Link>
+            <p className="mb-4 text-sm font-semibold text-[#1a1a1a]">
+              More {category?.name ?? ""} reviews:
+            </p>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {related.map((r) => (
+                <li key={r.frontmatter.slug}>
+                  <Link
+                    href={`/reviews/${r.frontmatter.slug}`}
+                    className="text-sm text-[#b8460f] hover:underline"
+                  >
+                    {r.frontmatter.title.split(":")[0]} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {category && (
+              <Link
+                href={`/category/${category.slug}`}
+                className="mt-5 inline-block text-sm text-[#55514a] hover:text-[#1a1a1a] transition"
+              >
+                View all {category.productCount} {category.name} reviews →
+              </Link>
+            )}
           </div>
         )}
       </article>

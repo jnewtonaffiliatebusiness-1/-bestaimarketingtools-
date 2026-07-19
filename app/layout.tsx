@@ -94,6 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <li><Link href="/reviews" className="hover:text-[#1a1a1a] transition">All Reviews</Link></li>
                   <li><Link href="/blog" className="hover:text-[#1a1a1a] transition">Blog</Link></li>
                   <li><Link href="/about" className="hover:text-[#1a1a1a] transition">About & Methodology</Link></li>
+                  <li><Link href="/disclosure" className="hover:text-[#1a1a1a] transition">Affiliate Disclosure</Link></li>
                 </ul>
               </div>
               <div>
@@ -113,8 +114,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <div className="mt-8 border-t border-[#e6e2da] pt-8 text-center text-xs text-[#8a857c]">
               <p>
-                Some links on this site are affiliate links. We may earn a commission at no extra cost to you.
-                This does not influence our editorial opinions.
+                Some links on this site are{" "}
+                <Link href="/disclosure" className="underline hover:text-[#1a1a1a] transition">affiliate links</Link>.
+                We may earn a commission at no extra cost to you. This does not influence our editorial opinions.
               </p>
               <p className="mt-2">
                 &copy; {new Date().getFullYear()} Best AI Marketing Tools. All rights reserved.
