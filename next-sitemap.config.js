@@ -1,6 +1,9 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || "https://www.aitoolsreviewshub.com",
+  // Hardcoded (NOT process.env.SITE_URL): a Vercel env var SITE_URL was set to a
+  // whitespace-padded non-www value, which broke every sitemap URL (wrong host + stray
+  // spaces). The canonical host is www — pin it here so the env var can't override it.
+  siteUrl: "https://www.aitoolsreviewshub.com",
   generateRobotsTxt: true,
   changefreq: "weekly",
   priority: 0.7,
