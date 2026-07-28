@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <body className="bg-[#f7f6f2] text-[#1a1a1a] antialiased">
+        <GoogleAnalytics />
         <header className="fixed top-0 z-50 w-full border-b border-[#e6e2da] bg-[#f7f6f2]/90 backdrop-blur-md">
           <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
             <Link href="/" className="font-black text-xl text-[#1a1a1a] hover:text-[#b8460f] transition">
