@@ -66,7 +66,7 @@ export default function EmailCapture() {
                 disabled={status === "loading"}
                 className="rounded-xl bg-[#b8460f] px-8 py-4 font-bold text-white transition hover:bg-[#9e3c0d] disabled:opacity-50"
               >
-                {status === "loading" ? "Sending..." : "Get Free PDF →"}
+                {status === "loading" ? "Subscribing..." : "Subscribe →"}
               </button>
             </form>
           )}
