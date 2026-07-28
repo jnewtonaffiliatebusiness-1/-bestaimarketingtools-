@@ -4,6 +4,19 @@ const path = require("path");
 const REVIEWS_DIR = path.join(__dirname, "../content/reviews");
 if (!fs.existsSync(REVIEWS_DIR)) fs.mkdirSync(REVIEWS_DIR, { recursive: true });
 
+// Generated pages must never assert anything that isn't true.
+//
+// This template previously hardcoded datePublished 2025-01-15 / dateModified 2025-03-01 onto
+// every file, which put a false publication date (~14 months before the site's first commit)
+// on 100 live pages, in both the visible page and the JSON-LD. It also emitted a fabricated
+// `testimonial:` and a "[2025]" title that went stale the moment the year turned.
+//
+// Rules for anything added here:
+//   - dates are the real generation date, never a constant
+//   - no invented quotes, ratings, user counts, or results claims  (see the July 2026 audit)
+//   - no year tags in titles/descriptions — they age into a false freshness signal
+const TODAY = new Date().toISOString().slice(0, 10);
+
 const reviews = [
   // AI Marketing Automation
   { slug: "instantly-ai-review", name: "Instantly.ai", cat: "ai-marketing-automation", rating: 4.1, price: 37, verdict: "Best-in-class cold email infrastructure with unlimited sending accounts, but AI writing needs heavy prompting", pros: ["Unlimited email accounts on paid plans","Excellent deliverability infrastructure","Clean analytics dashboard","Unibox for managing all replies"], cons: ["Steep initial learning curve","AI writing is generic without heavy prompting","No native CRM — requires Zapier","Pricing jumps significantly at scale"], weaknesses: ["Instantly.ai's AI writing produces generic copy that requires heavy manual editing","Costs balloon as you scale beyond a few thousand contacts","No native CRM means you're always duct-taping workflows together"], featured: true },
@@ -131,7 +144,7 @@ for (const r of reviews) {
   ];
 
   const content = `---
-title: "${productName} Review [2025]: Honest Look After Hands-On Testing"
+title: "${productName} Review: Honest Look After Hands-On Testing"
 slug: "${r.slug}"
 category: "${r.cat}"
 rating: ${r.rating}
@@ -149,12 +162,11 @@ productWeaknesses:
 ${r.weaknesses.map(w => `  - "${w}"`).join("\n")}
 comparisonRows:
 ${compRows.map(row => `  - feature: "${row.feature}"\n    product: "${row.product}"\n    bonfire: "${row.bonfire}"`).join("\n")}
-testimonial: "Switched from ${productName} to Bonfire Terminal and never looked back. The difference in results was immediate."
-datePublished: "2025-01-15"
-dateModified: "2025-03-01"
+datePublished: "${TODAY}"
+dateModified: "${TODAY}"
 author: "Editorial Team"
 featured: ${r.featured ? "true" : "false"}
-metaDescription: "Is ${productName} worth it in 2025? Read our honest review covering pricing, features, pros & cons. See how it compares to Bonfire Terminal."
+metaDescription: "Is ${productName} worth it? Read our honest review covering pricing, features, pros & cons. See how it compares to Bonfire Terminal."
 ---
 
 ## What Is ${productName}?

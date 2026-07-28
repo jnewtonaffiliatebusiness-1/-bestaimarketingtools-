@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const config = BEST_OF_CONFIG[slug];
   if (!config) return {};
   return {
-    title: `${config.title} (2025) — Ranked & Reviewed`,
+    title: `${config.title} — Ranked & Reviewed`,
     description: config.desc,
     alternates: { canonical: `/best/${slug}` },
   };

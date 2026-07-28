@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const aName = a.frontmatter.title.split(" Review")[0].split(":")[0].trim();
   const bName = b.frontmatter.title.split(" Review")[0].split(":")[0].trim();
   return {
-    title: `${aName} vs ${bName}: Which Is Better in 2025?`,
+    title: `${aName} vs ${bName}: Which Is Better?`,
     description: `${aName} vs ${bName} — side-by-side comparison of features, pricing, pros & cons. Find out which tool wins for your use case.`,
     alternates: { canonical: `/compare/${slugs}` },
   };

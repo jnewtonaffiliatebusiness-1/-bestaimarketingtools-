@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Best AI Marketing Tools — Honest Reviews & Comparisons 2025",
+    default: "Best AI Marketing Tools — Honest Reviews & Comparisons",
     template: "%s | Best AI Marketing Tools",
   },
   description:
@@ -92,7 +92,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <h4 className="mb-4 font-semibold text-[#1a1a1a]">Site</h4>
                 <ul className="space-y-2 text-sm text-[#55514a]">
                   <li><Link href="/reviews" className="hover:text-[#1a1a1a] transition">All Reviews</Link></li>
-                  <li><Link href="/blog" className="hover:text-[#1a1a1a] transition">Blog</Link></li>
                   <li><Link href="/about" className="hover:text-[#1a1a1a] transition">About & Methodology</Link></li>
                   <li><Link href="/disclosure" className="hover:text-[#1a1a1a] transition">Affiliate Disclosure</Link></li>
                 </ul>

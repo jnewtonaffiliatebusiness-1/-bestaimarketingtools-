@@ -19,7 +19,6 @@ module.exports = {
     return [
       { loc: "/", priority: 1.0, changefreq: "daily" },
       { loc: "/reviews", priority: 0.9, changefreq: "daily" },
-      { loc: "/blog", priority: 0.8, changefreq: "weekly" },
       { loc: "/about", priority: 0.5, changefreq: "monthly" },
     ];
   },

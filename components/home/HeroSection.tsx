@@ -18,7 +18,7 @@ export default function HeroSection() {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="mb-6 inline-block rounded-full border border-[#1b3a6b]/40 bg-[#eef1f6] px-4 py-2 text-sm font-medium text-[#b8460f]"
         >
-          100+ Trusted Software Reviews — Updated 2025
+          100+ Trusted Software Reviews
         </motion.div>
 
         <motion.h1

@@ -41,3 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# generated at build time by next-sitemap (postbuild) — Vercel regenerates these
+# on every deploy. Tracking them meant the repo carried a stale non-www copy that
+# contradicted production and misled a July 2026 audit.
+/public/sitemap.xml
+/public/sitemap-0.xml
+/public/robots.txt

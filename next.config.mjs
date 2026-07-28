@@ -14,6 +14,10 @@ const nextConfig = {
       { source: "/methodology", destination: "/about", permanent: true },
       { source: "/presell", destination: "/reviews", permanent: true },
       { source: "/compare", destination: "/reviews", permanent: true },
+      // /blog listed 8 articles that were never written — every "Read article" link 404'd.
+      // The index itself was indexed (sitemap priority 0.8), so redirect rather than 404 it.
+      { source: "/blog", destination: "/reviews", permanent: true },
+      { source: "/blog/:slug", destination: "/reviews", permanent: true },
     ];
   },
 };

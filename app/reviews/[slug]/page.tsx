@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: fm.title,
     description:
       fm.metaDescription ||
-      `Read our honest ${fm.title}. We cover pricing, features, pros & cons, and whether it's worth it in 2025.`,
+      `Read our honest ${fm.title}. We cover pricing, features, pros & cons, and whether it's worth it.`,
     openGraph: {
       title: fm.title,
       description: fm.metaDescription || fm.verdict,
@@ -196,10 +196,14 @@ export default async function ReviewPage({ params }: Props) {
           <span>By {fm.author}</span>
           <span>
             Published:{" "}
+            {/* timeZone UTC: a bare "YYYY-MM-DD" parses as UTC midnight, so rendering in a
+                negative-offset local zone shifted every date back a day and contradicted the
+                datePublished in the JSON-LD directly above. */}
             {new Date(fm.datePublished).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
+              timeZone: "UTC",
             })}
           </span>
           <span>
@@ -208,6 +212,7 @@ export default async function ReviewPage({ params }: Props) {
               year: "numeric",
               month: "long",
               day: "numeric",
+              timeZone: "UTC",
             })}
           </span>
         </div>

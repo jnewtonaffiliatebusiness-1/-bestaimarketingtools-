@@ -12,9 +12,17 @@ export async function POST(req: NextRequest) {
     const audienceId = process.env.RESEND_AUDIENCE_ID;
 
     if (!resendApiKey || !audienceId) {
-      // Dev mode — just log
-      console.log("[Subscribe] Email captured:", email);
-      return NextResponse.json({ success: true });
+      // FAIL LOUD. This used to log the address and return success:true, so in any
+      // environment missing these vars the visitor was told "you're subscribed" while the
+      // address was discarded — an opt-in that silently went nowhere. A visible error is
+      // recoverable; a fake success is not, because nobody ever finds out.
+      console.error(
+        "[Subscribe] MISCONFIGURED: RESEND_API_KEY / RESEND_AUDIENCE_ID not set — subscription rejected rather than silently dropped."
+      );
+      return NextResponse.json(
+        { error: "Subscriptions are temporarily unavailable" },
+        { status: 503 }
+      );
     }
 
     const res = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {

@@ -32,19 +32,23 @@ export default function EmailCapture() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
+          {/* Promise only what actually happens. This section previously offered a
+              "Free PDF cheat sheet" and told subscribers it was "on its way" — no such PDF
+              existed and the app never sent any email. Do not reintroduce a deliverable
+              here unless it exists AND something sends it. */}
           <div className="mb-4 text-5xl">🔥</div>
           <h2 className="mb-4 text-3xl font-bold text-[#1a1a1a]">
-            Get the 2025 AI Marketing Stack Cheat Sheet
+            Get new reviews in your inbox
           </h2>
           <p className="mb-8 text-[#55514a]">
-            Free PDF: the exact tools stack top marketers use in 2025, with pricing
-            comparisons and our top recommendations. No spam, ever.
+            We publish honest, hands-on reviews of marketing and AI software. Drop your
+            email and we&apos;ll send new ones as they go live. No spam, ever.
           </p>
 
           {status === "success" ? (
             <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-6">
               <p className="font-semibold text-emerald-400">
-                Check your email! Your cheat sheet is on its way.
+                You&apos;re subscribed — thanks!
               </p>
             </div>
           ) : (
