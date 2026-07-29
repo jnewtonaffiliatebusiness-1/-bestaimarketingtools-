@@ -11,13 +11,17 @@ export async function POST(req: NextRequest) {
     const resendApiKey = process.env.RESEND_API_KEY;
     const audienceId = process.env.RESEND_AUDIENCE_ID;
 
-    if (!resendApiKey || !audienceId) {
+    // Only the API key is required. Resend deprecated Audiences in favour of Segments, and a
+    // new account has a single implicit audience with no ID to copy — POST /contacts needs
+    // just an email. RESEND_AUDIENCE_ID stays OPTIONAL: set it to file subscribers into a
+    // specific segment, omit it to land them in the default audience.
+    if (!resendApiKey) {
       // FAIL LOUD. This used to log the address and return success:true, so in any
       // environment missing these vars the visitor was told "you're subscribed" while the
       // address was discarded — an opt-in that silently went nowhere. A visible error is
       // recoverable; a fake success is not, because nobody ever finds out.
       console.error(
-        "[Subscribe] MISCONFIGURED: RESEND_API_KEY / RESEND_AUDIENCE_ID not set — subscription rejected rather than silently dropped."
+        "[Subscribe] MISCONFIGURED: RESEND_API_KEY not set — subscription rejected rather than silently dropped."
       );
       return NextResponse.json(
         { error: "Subscriptions are temporarily unavailable" },
@@ -40,14 +44,20 @@ export async function POST(req: NextRequest) {
       {
         label: "current(/contacts)",
         url: "https://api.resend.com/contacts",
-        body: { email, segments: [audienceId] },
+        // segments only when an ID is configured — an empty array is not the same as absent
+        // and would file the contact nowhere.
+        body: audienceId ? { email, segments: [audienceId] } : { email },
       },
-      {
+    ];
+
+    // Legacy path only makes sense with an audience id in the URL.
+    if (audienceId) {
+      attempts.push({
         label: "legacy(/audiences)",
         url: `https://api.resend.com/audiences/${audienceId}/contacts`,
         body: { email, unsubscribed: false },
-      },
-    ];
+      });
+    }
 
     const failures: string[] = [];
     for (const attempt of attempts) {
