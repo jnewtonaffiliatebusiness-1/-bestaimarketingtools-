@@ -25,25 +25,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const res = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        unsubscribed: false,
-      }),
-    });
+    // Resend has two generations of the contacts API live at once:
+    //   current: POST /contacts  with segments:[id]
+    //   legacy:  POST /audiences/{id}/contacts
+    // A newly created account may only accept one of them, and picking wrong returns a 4xx
+    // that would surface to the visitor as a generic failure. Try current, fall back to
+    // legacy, and log which one answered so this is diagnosable from the Vercel logs.
+    const headers = {
+      Authorization: `Bearer ${resendApiKey}`,
+      "Content-Type": "application/json",
+    };
 
-    if (!res.ok) {
-      const err = await res.json();
-      console.error("[Subscribe] Resend error:", err);
-      return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
+    const attempts: Array<{ label: string; url: string; body: unknown }> = [
+      {
+        label: "current(/contacts)",
+        url: "https://api.resend.com/contacts",
+        body: { email, segments: [audienceId] },
+      },
+      {
+        label: "legacy(/audiences)",
+        url: `https://api.resend.com/audiences/${audienceId}/contacts`,
+        body: { email, unsubscribed: false },
+      },
+    ];
+
+    const failures: string[] = [];
+    for (const attempt of attempts) {
+      const res = await fetch(attempt.url, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(attempt.body),
+      });
+      if (res.ok) {
+        console.log(`[Subscribe] ok via ${attempt.label}`);
+        return NextResponse.json({ success: true });
+      }
+      failures.push(`${attempt.label} -> ${res.status} ${await res.text()}`);
     }
 
-    return NextResponse.json({ success: true });
+    // Both generations refused. Never return success here — a silent drop is the bug that
+    // discarded every opt-in for 141 days.
+    console.error("[Subscribe] Resend rejected both API generations:", failures.join(" | "));
+    return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
   } catch (err) {
     console.error("[Subscribe] Error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });

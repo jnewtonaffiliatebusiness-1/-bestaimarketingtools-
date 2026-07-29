@@ -48,7 +48,7 @@ export function generateMetadata({
 }
 
 function toolName(title: string) {
-  // "Systeme.io Review [2026]: The All-In-One…" -> "Systeme.io"
+  // "Systeme.io Review: The All-In-One…" -> "Systeme.io"
   return title.split(" Review")[0].split(":")[0].trim();
 }
 
