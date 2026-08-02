@@ -25,6 +25,13 @@ export interface ReviewFrontmatter {
   productWeaknesses?: string[];
   testimonial?: string;
   featured?: boolean;
+  /**
+   * Set on the 100 template-generated reviews (2026-08-01). They were 76%
+   * byte-identical to each other, which suppressed the whole domain — GSC
+   * showed 0 clicks / 2 impressions in 3 months. Emits robots noindex and
+   * excludes the page from the sitemap. Remove the flag to re-index.
+   */
+  noindex?: boolean;
 }
 
 export interface Review {

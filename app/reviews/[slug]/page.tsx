@@ -20,11 +20,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const review = getReviewBySlug(slug);
   if (!review) return {};
   const { frontmatter: fm } = review;
+
+  // ── noindex (2026-08-01) ────────────────────────────────────────────────
+  // GSC measured 0 clicks / 2 impressions across 117 pages over 3 months.
+  // Cause: 100 of these reviews were generated from one template — 76% of any
+  // page was byte-identical to any other (152 of 199 lines between the Jasper
+  // and Copy.ai reviews), with the same title formula on ~99 of 100. That is
+  // the scaled-content profile Google answers with silence, and it was
+  // suppressing the whole domain including the pages worth ranking.
+  //
+  // Those 100 carry `noindex: true` in frontmatter. They stay reachable so
+  // Google can crawl and honour the directive — deleting them would produce
+  // 404s and Google would never see the signal. They are also excluded from
+  // the sitemap (next-sitemap.config.js).
+  //
+  // Reversible: remove the frontmatter flag. Backup of the originals is at
+  // content/reviews_BACKUP_20260801.
+  const noindex = fm.noindex === true;
+
   return {
     title: fm.title,
     description:
       fm.metaDescription ||
       `Read our honest ${fm.title}. We cover pricing, features, pros & cons, and whether it's worth it.`,
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title: fm.title,
       description: fm.metaDescription || fm.verdict,
