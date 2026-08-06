@@ -56,12 +56,10 @@ export default function HeroSection() {
             Browse All Reviews
           </Link>
           <Link
-            href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=hero&utm_campaign=homepage"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/ai-marketers-club"
             className="group relative rounded-xl bg-[#b8460f] px-8 py-4 font-bold text-white transition hover:bg-[#9e3c0d]"
           >
-            <span className="relative z-10">See Bonfire Terminal →</span>
+            <span className="relative z-10">AI Marketers Club — $27 →</span>
             <div className="absolute inset-0 rounded-xl bg-[#b8460f] opacity-0 blur-xl transition-opacity group-hover:opacity-50" />
           </Link>
         </motion.div>

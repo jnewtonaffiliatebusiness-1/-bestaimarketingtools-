@@ -54,13 +54,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/category/crm-sales-automation" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 CRM
               </Link>
+              {/* Points at our own offer page, not straight at the checkout.
+                  Until 2026-08-06 this threw browsing visitors directly at a
+                  third-party cart with nothing selling in between — 20 clicks
+                  produced 0 order-form visitors. It was also labelled "Bonfire
+                  Terminal", which is the $5,000 product, not the $27 club it
+                  actually opened. */}
               <Link
-                href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=nav&utm_campaign=navbar"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/ai-marketers-club"
                 className="rounded-lg bg-[#b8460f] px-4 py-2 font-semibold text-white hover:bg-[#9e3c0d] transition"
               >
-                Bonfire Terminal
+                AI Marketers Club
               </Link>
             </div>
           </nav>
@@ -104,12 +108,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   An affiliate partner we work with:
                 </p>
                 <Link
-                  href="https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=footer&utm_campaign=footer"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/ai-marketers-club"
                   className="inline-block rounded-lg bg-[#b8460f] px-4 py-2 text-sm font-bold text-white hover:bg-[#9e3c0d] transition"
                 >
-                  Try Bonfire Terminal →
+                  AI Marketers Club — $27 →
                 </Link>
               </div>
             </div>

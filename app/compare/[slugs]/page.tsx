@@ -141,17 +141,21 @@ export default async function ComparePage({ params }: Props) {
         <h2 className="mb-3 text-xl font-bold text-[#1a1a1a]">
           There&apos;s a third option worth considering
         </h2>
+        {/* Previous copy said Bonfire was "purpose-built to solve the exact
+            problems that make users switch between" whichever two tools this
+            page happened to compare — asserted about every pair on the site,
+            true of none of them by design. Replaced with the actual difference. */}
         <p className="mb-6 text-[#55514a]">
-          Bonfire Terminal was purpose-built to solve the exact problems that make users switch
-          between tools like {aName} and {bName}.
+          {aName} and {bName} are both cloud subscriptions you pay for monthly.
+          Bonfire Terminal is a local AI agent that runs on hardware you own — a
+          different trade-off, not a better version of the same one. The way in is
+          a $27 club that includes 21 days of access.
         </p>
         <Link
-          href={`https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=compare&utm_campaign=${slugs}`}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/ai-marketers-club"
           className="inline-block rounded-xl bg-[#b8460f] px-8 py-4 font-bold text-white transition hover:bg-[#9e3c0d]"
         >
-          See Bonfire Terminal →
+          What the $27 actually gets you →
         </Link>
       </div>
     </div>

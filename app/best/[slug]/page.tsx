@@ -138,22 +138,30 @@ export default async function BestOfPage({ params }: Props) {
         })}
       </div>
 
-      {/* Bonfire CTA */}
+      {/* Sponsored CTA → our own offer page.
+          Previous copy ranked it "Our #0 Recommendation" and called it "the
+          platform built to outperform this entire category" — a superiority
+          claim we never tested, sitting above a ranked list we did. Same
+          pattern the 2026-07-14 audit removed from the review CTA; it survived
+          here. Replaced with the honest framing, and labelled as sponsored. */}
       <div className="mt-12 rounded-2xl border border-[#1b3a6b]/40 bg-[#eef1f6] p-8 text-center">
+        <div className="mb-3 inline-block rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#b8460f]">
+          Sponsored
+        </div>
         <h2 className="mb-3 text-2xl font-bold text-[#1a1a1a]">
-          Our #0 Recommendation
+          One alternative that is not on this list
         </h2>
         <p className="mb-6 text-[#55514a]">
-          Before you subscribe to any of the tools above, see Bonfire Terminal — the platform
-          built to outperform this entire category.
+          Everything ranked above is a cloud subscription. Bonfire Terminal is an
+          AI agent that runs locally on your own machine instead — we have not
+          ranked it against these tools because it does a different job. The way
+          in is a $27 club that includes 21 days of access.
         </p>
         <Link
-          href={`https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=bestof&utm_campaign=${slug}`}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/ai-marketers-club"
           className="inline-block rounded-xl bg-[#b8460f] px-10 py-4 font-bold text-white transition hover:bg-[#9e3c0d]"
         >
-          See Bonfire Terminal →
+          What the $27 actually gets you →
         </Link>
       </div>
     </div>

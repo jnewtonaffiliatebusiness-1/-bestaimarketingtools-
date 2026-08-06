@@ -21,6 +21,18 @@ export interface ReviewFrontmatter {
   dateModified: string;
   author: string;
   metaDescription?: string;
+  /**
+   * The product being reviewed, e.g. "GoHighLevel".
+   *
+   * Without this, the name is derived from the title by splitting on " Review"
+   * and ":" — which works for the templated "X Review: …" titles but produces
+   * nonsense for editorial headlines. "What a 15-Client Agency Actually Pays for
+   * GoHighLevel" derived to itself, and surfaced verbatim in the sponsored CTA
+   * ("our criticisms of What a 15-Client Agency Actually Pays for GoHighLevel")
+   * and in the itemReviewed name of the Review JSON-LD. Set it explicitly on any
+   * review whose title is not "<Product> Review: …".
+   */
+  productName?: string;
   comparisonRows?: { feature: string; product: string; bonfire: string }[];
   productWeaknesses?: string[];
   testimonial?: string;

@@ -55,6 +55,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/**
+ * The product a review is about. Prefers the explicit `productName` frontmatter
+ * field; falls back to the old title-splitting heuristic, which is correct only
+ * for "<Product> Review: …" titles. See ReviewFrontmatter.productName.
+ */
+function productNameOf(fm: ReviewFrontmatter): string {
+  return fm.productName ?? fm.title.split(" Review")[0].split(":")[0].trim();
+}
+
 function ReviewJsonLd({ fm }: { fm: ReviewFrontmatter }) {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -72,7 +81,7 @@ function ReviewJsonLd({ fm }: { fm: ReviewFrontmatter }) {
     },
     itemReviewed: {
       "@type": "SoftwareApplication",
-      name: fm.title.split(" Review")[0].split(":")[0].trim(),
+      name: productNameOf(fm),
       applicationCategory: "BusinessApplication",
       offers: {
         "@type": "Offer",
@@ -263,7 +272,7 @@ export default async function ReviewPage({ params }: Props) {
 
         {/* Bonfire Terminal CTA — always last */}
         <BonfireTerminalCTA
-          productName={fm.title.split(" Review")[0].split(":")[0].trim()}
+          productName={productNameOf(fm)}
           comparisonRows={fm.comparisonRows ?? defaultComparisonRows}
           utmCampaign={slug}
         />

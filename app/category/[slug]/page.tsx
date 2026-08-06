@@ -118,21 +118,26 @@ export default async function CategoryPage({ params }: Props) {
         ))}
       </div>
 
-      {/* Bonfire CTA */}
+      {/* Sponsored CTA → our own offer page.
+          Previous copy claimed "thousands of marketers choose Bonfire Terminal
+          over every tool in this category". Nobody counted them and no such
+          comparison was run — that is invented social proof plus an unsupported
+          superiority claim, the exact pattern the 2026-07-14 integrity audit
+          stripped out of the review CTA. Replaced with what is true. */}
       <div className="mt-12 rounded-2xl border border-[#1b3a6b]/40 bg-[#eef1f6] p-8 text-center">
         <h2 className="mb-3 text-2xl font-bold text-[#1a1a1a]">
-          Not satisfied with any of these?
+          Would you rather not rent your tools?
         </h2>
         <p className="mb-6 text-[#55514a]">
-          See why thousands of marketers choose Bonfire Terminal over every tool in this category.
+          Every tool on this page is a cloud subscription. Bonfire Terminal is a
+          different shape of thing — an AI agent that runs on your own machine.
+          The way in is a $27 club that includes 21 days of it.
         </p>
         <Link
-          href={`https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=category&utm_campaign=${slug}`}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/ai-marketers-club"
           className="inline-block rounded-xl bg-[#b8460f] px-8 py-4 font-bold text-white transition hover:bg-[#9e3c0d]"
         >
-          See Bonfire Terminal →
+          What the $27 actually gets you →
         </Link>
       </div>
     </div>

@@ -35,7 +35,12 @@ export default function BonfireTerminalCTA({
   comparisonRows,
   utmCampaign,
 }: Props) {
-  const bonfireUrl = `https://www.digistore24.com/redir/300124/JNewton/aitoolshub?utm_source=reviewsite&utm_medium=review&utm_campaign=${utmCampaign}`;
+  // Goes to OUR offer page, not straight to the third-party checkout (changed
+  // 2026-08-06). This block sits on 100+ reviews and was the site's highest-volume
+  // placement, yet it handed cold readers to a cart with nothing selling in
+  // between. `?from=` keeps the originating review attributable in GA4; the offer
+  // page sets its own canonical so the parameter costs nothing in search.
+  const offerUrl = `/ai-marketers-club?from=${utmCampaign}`;
 
   return (
     <section className="mt-16 rounded-2xl border border-[#1b3a6b]/40 bg-[#eef1f6] p-8">
@@ -71,9 +76,7 @@ export default function BonfireTerminalCTA({
       )}
 
       <Link
-        href={bonfireUrl}
-        target="_blank"
-        rel="sponsored nofollow noopener noreferrer"
+        href={offerUrl}
         className="inline-flex items-center gap-2 rounded-xl bg-[#b8460f] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#9e3c0d] hover:shadow-lg hover:shadow-amber-500/25"
       >
         See what Bonfire Terminal is
@@ -81,11 +84,13 @@ export default function BonfireTerminalCTA({
       </Link>
 
       <p className="mt-4 text-xs leading-relaxed text-[#8a857c]">
-        Bonfire Terminal access is included with the AI Marketers Club ($27 entry, which
-        includes 21 days of access; the club also sells higher-priced products). We earn a
-        commission if you buy through this link, at no extra cost to you — which is exactly
-        why our criticisms of {productName} are printed in full above, and why we have told
-        you what this is not.
+        The way in is the AI Marketers Club — $27 one-time, which includes{" "}
+        <strong>21 days</strong> of Bonfire Terminal access. Keeping it after that is a
+        separate purchase, and the vendor&apos;s FAQ states Bonfire Terminal starts at
+        $5,000. We earn a commission if you join, at no extra cost to you — which is
+        exactly why our criticisms of {productName} are printed in full above, why we have
+        told you what this is not, and why the $5,000 is in this sentence rather than left
+        for you to discover later.
       </p>
     </section>
   );
