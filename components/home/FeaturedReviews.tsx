@@ -50,8 +50,22 @@ export default function FeaturedReviews({ reviews }: Props) {
                 className="group block rounded-2xl border border-[#e6e2da] bg-white p-6 transition hover:border-[#1b3a6b]/40 hover:bg-[#eef1f6]"
               >
                 <div className="mb-3 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-[#eef1f6] flex items-center justify-center text-lg">
-                    {review.frontmatter.logoImage ? "🔧" : "⚙️"}
+                  {/*
+                    Real vendor logo, fetched by scripts/fetch_logos.mjs.
+                    Was: {logoImage ? "🔧" : "⚙️"} — the field's EXISTENCE picked an
+                    emoji and the image was never rendered, so every card showed the
+                    same wrench. The files it pointed at did not exist at all.
+                    onError falls back to the neutral tile rather than a broken icon,
+                    because not every slug resolves to a real logo.
+                  */}
+                  <div className="h-10 w-10 shrink-0 rounded-lg bg-[#eef1f6] flex items-center justify-center overflow-hidden">
+                    <img
+                      src={`/images/logos/${review.frontmatter.slug}.png`}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-contain"
+                      onError={(e) => { e.currentTarget.style.display = "none"; }}
+                    />
                   </div>
                   <div>
                     <h3 className="font-bold text-[#1a1a1a] group-hover:text-[#b8460f] transition text-sm">
