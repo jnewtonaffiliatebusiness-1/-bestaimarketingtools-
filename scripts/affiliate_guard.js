@@ -61,22 +61,28 @@ if (leaks.length) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CHECK 2 (added 2026-08-06): Digistore24 PATH-based affiliate links.
+// CHECK 2 — the club offer link.
 //
-// The check above only inspects query parameters (?ref=, ?via=, …). The AI
-// Marketers Club link puts the affiliate ID in the PATH instead:
+// 🚨 REWRITTEN 2026-08-07 WHEN THE OFFER MOVED DIGISTORE24 → CLICKBANK.
+// The previous version validated the Digistore path shape
+// (digistore24.com/redir/{product}/{payee}/…). After the switch there are zero
+// Digistore links left, so that check would have found nothing, reported
+// "0 foreign" and PASSED — protecting the site's highest-value link with a test
+// that no longer looked at it. A check that stops covering what it was written
+// to cover does not fail; it goes quiet. This one had to move with the URL.
 //
-//     https://www.digistore24.com/redir/300124/JNewton/aitoolshub
-//                                       ^prod   ^payee  ^campaign
-//
-// So a link paying a stranger — .../redir/300124/SomeoneElse/… — passed the
-// original guard silently. This is the single highest-value link on the site.
-// Scans every source file, not just the registry, so a stray copy-paste
-// anywhere is caught too.
-const SRC_DIRS = ['app', 'components', 'lib', 'scripts'];
-const DIGISTORE_REDIR = /digistore24\.com\/redir\/([^/\s"'`]+)\/([^/\s"'`?]+)/gi;
-const OUR_DIGISTORE_AFFILIATE = 'JNewton';
-const OUR_DIGISTORE_PRODUCT = '300124';
+// ClickBank puts the payee in a QUERY PARAM:
+//     https://hop.clickbank.net/?affiliate=jzoolu&vendor=j1r2c
+// Scans every source file, not just the registry, so a stray copy-paste is caught.
+// NOTE the capture includes the leading "?" — without it, an `affiliate=` sitting
+// at position 0 never matches the `[?&]affiliate=` lookup below and every link
+// reports affiliate="(none)". Found by the clean-run control, 2026-08-07.
+const CB_HOPLINK = /hop\.clickbank\.net\/?(\?[^"'`\s]+)/gi;
+const OUR_CB_AFFILIATE = 'jzoolu';
+const OUR_CB_VENDOR = 'j1r2c';
+// Any leftover Digistore club link is now a LEAK by definition — it pays the
+// front end only and bypasses the funnel commission entirely.
+const STALE_DIGISTORE = /digistore24\.com\/redir\/[^"'`\s]+/gi;
 
 function walk(dir, acc = []) {
   const root = path.resolve(__dirname, '..', dir);
@@ -93,22 +99,41 @@ function walk(dir, acc = []) {
   return acc;
 }
 
-function scanDigistore(files) {
+function scanClickbank(files) {
   const bad = [];
   let found = 0;
   for (const file of files) {
+    // Skip this file. It necessarily contains example URLs in its own comments,
+    // and scanning them produced false positives on the first clean run.
+    if (path.resolve(file) === path.resolve(__filename)) continue;
+
     const src = fs.readFileSync(file, 'utf8');
-    for (const m of src.matchAll(DIGISTORE_REDIR)) {
-      const [full, product, affiliate] = m;
-      // The template literal in lib/offer.ts builds the path from constants —
-      // it reads as "${CLUB_PRODUCT_ID}/${CLUB_AFFILIATE_ID}". Skip the
-      // interpolated form here; the constants themselves are checked below.
-      if (product.startsWith('${') || affiliate.startsWith('${')) continue;
-      if (product.startsWith('{') || affiliate.startsWith('{')) continue; // doc comment
+
+    // Any hardcoded hoplink must name US.
+    for (const m of src.matchAll(CB_HOPLINK)) {
+      const qs = m[1];
+      if (qs.includes('${')) continue;                  // built from constants — checked below
+      if (/\{[A-Za-z_]+\}/.test(qs)) continue;          // {NICKNAME}/{VENDOR} placeholder in docs
       found++;
-      if (affiliate !== OUR_DIGISTORE_AFFILIATE || product !== OUR_DIGISTORE_PRODUCT) {
-        bad.push({ file: path.relative(path.resolve(__dirname, '..'), file), url: full });
+      const aff = (qs.match(/[?&]affiliate=([^&"'`\s]+)/i) || [])[1];
+      const ven = (qs.match(/[?&]vendor=([^&"'`\s]+)/i) || [])[1];
+      if (aff !== OUR_CB_AFFILIATE || ven !== OUR_CB_VENDOR) {
+        bad.push({
+          file: path.relative(path.resolve(__dirname, '..'), file),
+          url: m[0],
+          why: `affiliate="${aff ?? '(none)'}" vendor="${ven ?? '(none)'}"`,
+        });
       }
+    }
+
+    // A surviving Digistore club link is a leak now: it pays the front end only.
+    for (const m of src.matchAll(STALE_DIGISTORE)) {
+      if (m[0].includes('${') || /\{[A-Za-z_]+\}/.test(m[0])) continue;  // doc placeholder
+      bad.push({
+        file: path.relative(path.resolve(__dirname, '..'), file),
+        url: m[0],
+        why: 'STALE Digistore24 link — pays the front end only, bypasses the funnel commission',
+      });
     }
   }
   return { bad, found };
@@ -123,24 +148,30 @@ if (!fs.existsSync(OFFER)) {
 const offerSrc = fs.readFileSync(OFFER, 'utf8');
 const constOf = (name) => (offerSrc.match(new RegExp(`export const ${name}\\s*=\\s*"([^"]+)"`)) || [])[1];
 const declaredAffiliate = constOf('CLUB_AFFILIATE_ID');
-const declaredProduct = constOf('CLUB_PRODUCT_ID');
+const declaredVendor = constOf('CLUB_VENDOR_ID');
 
-if (declaredAffiliate !== OUR_DIGISTORE_AFFILIATE || declaredProduct !== OUR_DIGISTORE_PRODUCT) {
+if (declaredAffiliate !== OUR_CB_AFFILIATE || declaredVendor !== OUR_CB_VENDOR) {
   console.error('\n✗ AFFILIATE GUARD FAILED — BUILD BLOCKED\n');
   console.error('  lib/offer.ts does not pay us. Every club CTA on the site is built from these:');
-  console.error(`    CLUB_PRODUCT_ID   = ${declaredProduct   ?? '(unparseable)'}   expected ${OUR_DIGISTORE_PRODUCT}`);
-  console.error(`    CLUB_AFFILIATE_ID = ${declaredAffiliate ?? '(unparseable)'}   expected ${OUR_DIGISTORE_AFFILIATE}\n`);
+  console.error(`    CLUB_AFFILIATE_ID = ${declaredAffiliate ?? '(unparseable)'}   expected ${OUR_CB_AFFILIATE}`);
+  console.error(`    CLUB_VENDOR_ID    = ${declaredVendor    ?? '(unparseable)'}   expected ${OUR_CB_VENDOR}\n`);
   process.exit(1);
 }
 
-const { bad: digistoreLeaks, found: digistoreFound } = scanDigistore(walk('app').concat(
+// The site must not still be building a Digistore URL anywhere.
+if (/digistore24\.com\/redir\/\$\{/.test(offerSrc)) {
+  console.error('\n✗ AFFILIATE GUARD FAILED — lib/offer.ts still builds a Digistore24 redirect.\n');
+  process.exit(1);
+}
+
+const { bad: clubLeaks, found: cbFound } = scanClickbank(walk('app').concat(
   walk('components'), walk('lib'), walk('scripts')
 ));
 
-if (digistoreLeaks.length) {
+if (clubLeaks.length) {
   console.error('\n✗ AFFILIATE GUARD FAILED — BUILD BLOCKED\n');
-  console.error('  Hardcoded Digistore24 links that do NOT pay us:\n');
-  digistoreLeaks.forEach((l) => console.error(`    ${l.file}\n      ${l.url}\n`));
+  console.error('  Club links that do NOT pay us correctly:\n');
+  clubLeaks.forEach((l) => console.error(`    ${l.file}\n      ${l.url}\n      ${l.why}\n`));
   console.error(`  FIX: delete the hardcoded URL and call clubUrl() from lib/offer.ts instead.\n`);
   process.exit(1);
 }
@@ -149,6 +180,7 @@ console.log(
   `✓ affiliate guard: ${entries.length} entries, ${monetized} monetized to us, 0 foreign tracking links.`
 );
 console.log(
-  `✓ digistore path check: affiliate "${declaredAffiliate}" / product ${declaredProduct} in lib/offer.ts, ${digistoreFound} hardcoded literal(s) scanned, 0 foreign.`
+  `✓ clickbank check: affiliate "${declaredAffiliate}" / vendor "${declaredVendor}" in lib/offer.ts, ` +
+  `${cbFound} hardcoded hoplink(s) scanned, 0 foreign, 0 stale Digistore links.`
 );
 process.exit(0);

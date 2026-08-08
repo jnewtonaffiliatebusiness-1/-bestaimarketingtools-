@@ -1,5 +1,5 @@
 /**
- * THE OFFER — AI Marketers Club (Digistore24 product 300124).
+ * THE OFFER — AI Marketers Club.
  *
  * This is the one product this site earns a commission on directly, so the
  * affiliate URL lives here and NOWHERE else. It was previously copy-pasted as a
@@ -9,21 +9,55 @@
  *
  * Build `clubUrl()` instead of writing the URL again.
  *
- * ── Affiliate ID is in the PATH, not a query param ──────────────────────────
- *   https://www.digistore24.com/redir/{PRODUCT}/{AFFILIATE}/{CAMPAIGN_KEY}
- * scripts/affiliate_guard.js checks this shape specifically. Do not "simplify"
- * the path segments below into one string — the guard reads them separately.
+ * ═══════════════════════════════════════════════════════════════════════════
+ * SWITCHED DIGISTORE24 → CLICKBANK, 2026-08-07. Why, in one table:
+ *
+ *              Digistore24 (old)        ClickBank (now)
+ *   Front end  $25.80 → $17.90 (90%)    $27  → $20.25  (75%)
+ *   OTO1       not paid to us           $147 → $110.25 (75%)
+ *   OTO2       not paid to us           $597 → $447.75 (75%)
+ *   MAX/BUYER  $17.90                   $578.25
+ *
+ * Same product, same vendor (M3M3TIC LLC), two platforms. The Digistore24 link
+ * paid the FRONT END ONLY; the ClickBank programme pays 75% across the whole
+ * funnel. Source: the vendor's own affiliate portal, joinaimarketers.club/cb/affiliates/
+ * (reached via a redirect from bonfireterminal.com/affiliates/), read 2026-08-07.
+ *
+ * ⚠️ 60-day cookie AND a 60-day refund window. $578.25 is a CEILING, not an
+ *    expectation — a commission can be clawed back for two months. Front-end
+ *    refunds measured 27.8% on Digistore24.
+ *
+ * ── Affiliate ID is a QUERY PARAM here, not a path segment ──────────────────
+ *   https://hop.clickbank.net/?affiliate={NICKNAME}&vendor={VENDOR}
+ *
+ * 🔑 VERIFIED, NOT GUESSED (2026-08-07). The classic subdomain hoplink form
+ *    `jzoolu.j1r2c.hop.clickbank.net` returns HTTP 000 — it does NOT resolve.
+ *    Only the query form works. Controls were run both ways:
+ *      affiliate=jzoolu               → joinaimarketers.club/cb/?hop=jzoolu   ✅
+ *      affiliate=notarealnickname9x7q → errCode=invalidnickname, hop=0        ✅ rejected
+ *      vendor=notavendor9x7q          → errCode=invalidvendornickname         ✅ rejected
+ *    So a 200 here genuinely means the nickname is live.
+ *
+ * ⚠️ `tid` is sent but COULD NOT BE VERIFIED externally — it does not appear in
+ *    the landing URL (only `?hop=` and a random `hopId`). ClickBank documents tid
+ *    as visible in its own reporting; that has NOT been confirmed from a real
+ *    click yet. Do not build per-campaign attribution on it until a sale proves it.
  */
 
-export const CLUB_PRODUCT_ID = "300124";
-export const CLUB_AFFILIATE_ID = "JNewton";
-export const CLUB_CAMPAIGN_KEY = "aitoolshub";
+export const CLUB_AFFILIATE_ID = "jzoolu";   // ClickBank nickname
+export const CLUB_VENDOR_ID = "j1r2c";       // ClickBank vendor for AI Marketers Club
+
+/** ClickBank TIDs allow lowercase letters, numbers and underscores only — no dashes. */
+function toTid(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 24);
+}
 
 /** Where a click goes. Nothing else in the codebase should build this string. */
 export function clubUrl(medium: string, campaign: string): string {
-  const url = new URL(
-    `https://www.digistore24.com/redir/${CLUB_PRODUCT_ID}/${CLUB_AFFILIATE_ID}/${CLUB_CAMPAIGN_KEY}`
-  );
+  const url = new URL("https://hop.clickbank.net/");
+  url.searchParams.set("affiliate", CLUB_AFFILIATE_ID);
+  url.searchParams.set("vendor", CLUB_VENDOR_ID);
+  url.searchParams.set("tid", toTid(`${medium}_${campaign}`));
   url.searchParams.set("utm_source", "reviewsite");
   url.searchParams.set("utm_medium", medium);
   url.searchParams.set("utm_campaign", campaign);
@@ -45,12 +79,12 @@ export const CLUB = {
   name: "AI Marketers Club",
   vendor: "M3M3TIC LLC",
   presenter: "John Crestani",
-  processor: "Digistore24",
-  /** Advertised price. The Digistore24 checkout itself renders $25.80. */
+  /** Switched 2026-08-07 — see the header. ClickBank pays the whole funnel. */
+  processor: "ClickBank",
   price: 27,
   /** Vendor FAQ: "$27 is a one-time payment for lifetime access". */
   billing: "one-time" as const,
-  /** Vendor FAQ: full refund within 60 days, handled by Digistore24. */
+  /** 60-day refund window — same on both platforms. */
   guaranteeDays: 60,
   supportEmail: "support@m3m3tic.com",
   /** Where the product is actually delivered after purchase. */
