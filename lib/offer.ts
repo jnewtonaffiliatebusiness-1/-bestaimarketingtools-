@@ -12,20 +12,28 @@
  * ═══════════════════════════════════════════════════════════════════════════
  * SWITCHED DIGISTORE24 → CLICKBANK, 2026-08-07. Why, in one table:
  *
- *              Digistore24 (old)        ClickBank (now)
- *   Front end  $25.80 → $17.90 (90%)    $27  → $20.25  (75%)
- *   OTO1       not paid to us           $147 → $110.25 (75%)
- *   OTO2       not paid to us           $597 → $447.75 (75%)
- *   MAX/BUYER  $17.90                   $578.25
+ * The Digistore24 link paid the FRONT END ONLY; ClickBank pays across the funnel.
+ * That part is settled. The SIZE of the funnel is not — see below.
  *
- * Same product, same vendor (M3M3TIC LLC), two platforms. The Digistore24 link
- * paid the FRONT END ONLY; the ClickBank programme pays 75% across the whole
- * funnel. Source: the vendor's own affiliate portal, joinaimarketers.club/cb/affiliates/
- * (reached via a redirect from bonfireterminal.com/affiliates/), read 2026-08-07.
+ * 🚨 THE VENDOR PUBLISHES TWO DIFFERENT FUNNELS (checked 2026-08-08):
+ *      affiliate portal  joinaimarketers.club/cb/affiliates/
+ *          $27 + $147 + $597  ->  "earn up to $578.25 per buyer"
+ *      ClickBank marketplace listing (vendor j1r2c, rank #812)
+ *          "$27 FE, $197 OTO" ->  "$163 max commission"
+ *    Both are internally consistent (771 x .75 = 578.25 / 224 x .75 = 168), so it
+ *    is not a typo — they describe different products. UNRESOLVED; parked for a
+ *    live seminar question.
  *
- * ⚠️ 60-day cookie AND a 60-day refund window. $578.25 is a CEILING, not an
- *    expectation — a commission can be clawed back for two months. Front-end
- *    refunds measured 27.8% on Digistore24.
+ * ⛔ AND THE MEASURED NUMBER IS BELOW BOTH. ClickBank's own marketplace stats:
+ *      Avg $/conversion  Total $15.91 · Initial $15.91 · Future — (empty)
+ *      Gravity 1.4 · Rank #812
+ *    $15.91 is what a conversion is actually worth across every affiliate running
+ *    it. `Future` empty ⇒ NO upsell commission is reaching affiliates at all.
+ *    ⇒ Plan on ~$15.91/buyer. Do NOT plan on $578.25 or $163.
+ *    Full working: E:\AFFILIATE MARKETING MASTER\PAID_TRAFFIC_BOUNDED_TEST.md §0
+ *
+ * ⚠️ 60-day cookie AND a 60-day refund window — a commission can be clawed back
+ *    for two months. Front-end refunds measured 27.8% on Digistore24.
  *
  * ── Affiliate ID is a QUERY PARAM here, not a path segment ──────────────────
  *   https://hop.clickbank.net/?affiliate={NICKNAME}&vendor={VENDOR}
@@ -38,10 +46,18 @@
  *      vendor=notavendor9x7q          → errCode=invalidvendornickname         ✅ rejected
  *    So a 200 here genuinely means the nickname is live.
  *
- * ⚠️ `tid` is sent but COULD NOT BE VERIFIED externally — it does not appear in
- *    the landing URL (only `?hop=` and a random `hopId`). ClickBank documents tid
- *    as visible in its own reporting; that has NOT been confirmed from a real
- *    click yet. Do not build per-campaign attribution on it until a sale proves it.
+ * ✅ `tid` IS VERIFIED (2026-08-08) — this note used to say it wasn't. Self-click
+ *    hops appeared by name in Reporting → Analytics → VIEW AS AFFILIATE →
+ *    Table Data → Tracking Data → TID, including `offerpage_glance`, a tid built
+ *    by clubUrl() on the LIVE site. That row proves the whole chain end to end:
+ *    site CTA → hoplink → ClickBank attribution, per placement.
+ *    🔑 `tid` never appears in the landing URL (only `?hop=` + a random `hopId`).
+ *       That is NORMAL — it is recorded server-side. Do not "fix" it.
+ *    🔑 Same for `hop=`: some vendors' pages render it blank or omit it entirely
+ *       and the hop is STILL credited (proved 2026-08-09 via seller `neuroprime`).
+ *    ⚠️ Still unproven: that a SALE carries the tid to the commission line.
+ *
+ * ⚠️ Reporting runs a ~1-day delay. A hop fired today may not show until tomorrow.
  */
 
 export const CLUB_AFFILIATE_ID = "jzoolu";   // ClickBank nickname

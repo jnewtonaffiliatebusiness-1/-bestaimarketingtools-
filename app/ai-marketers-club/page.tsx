@@ -3,7 +3,13 @@ import Link from "next/link";
 import { CLUB, CLUB_INCLUDES, clubUrl } from "@/lib/offer";
 
 /**
- * The offer page for AI Marketers Club (Digistore24 300124).
+ * The offer page for AI Marketers Club.
+ *
+ * PLATFORM (2026-08-07): ClickBank — affiliate `jzoolu`, vendor `j1r2c`. It ran on
+ * Digistore24 (product 300124) until 08-07; that link paid the FRONT END ONLY.
+ * The Digistore references below are HISTORY, not the live wiring. Zero Digistore
+ * links remain on the site and `scripts/affiliate_guard.js` now treats any that
+ * reappear as a leak.
  *
  * WHY THIS EXISTS (2026-08-06): the affiliate link was live in 5 places on this
  * site — nav, footer, /best, /category, /compare — and every one of them threw
