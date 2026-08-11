@@ -1,14 +1,15 @@
 import Link from "next/link";
 import StarRating from "./StarRating";
 import ProsConsList from "./ProsConsList";
-import type { ReviewFrontmatter } from "@/lib/reviews";
+import { formatStartingPrice, type ReviewFrontmatter } from "@/lib/reviews";
 
 interface Props {
   frontmatter: ReviewFrontmatter;
 }
 
 export default function ReviewHero({ frontmatter }: Props) {
-  const { title, rating, verdict, pros, cons, affiliateUrl, pricingStart, pricingUnit, heroImage } = frontmatter;
+  const { title, rating, verdict, pros, cons, affiliateUrl, heroImage } = frontmatter;
+  const startingPrice = formatStartingPrice(frontmatter);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-[#e6e2da] bg-white backdrop-blur-sm">
@@ -26,9 +27,16 @@ export default function ReviewHero({ frontmatter }: Props) {
       <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
         <div>
           <StarRating rating={rating} size="lg" />
-          <p className="mt-1 text-sm text-[#b8460f]">
-            Starting at ${pricingStart}/{pricingUnit}
-          </p>
+          {/*
+            Omitted rather than defaulted when there is no starting price.
+            pricingStart: 0 means two different things across the corpus — a real
+            free tier (rank-math, screaming-frog) and an unpublished enterprise
+            price (brandwatch, conductor-seo, emplifi) — so any fixed wording
+            here asserts something false for one group or the other.
+          */}
+          {startingPrice && (
+            <p className="mt-1 text-sm text-[#b8460f]">Starting at {startingPrice}</p>
+          )}
         </div>
         {affiliateUrl && (
           <Link
