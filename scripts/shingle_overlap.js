@@ -30,6 +30,10 @@ const N = 8;
 
 const GROUPS = {
   'NEW (rewritten today)': [
+    'surfer-seo-review', 'socialbee-review', 'lemlist-review',
+    'yoast-seo-review', 'metricool-review',
+  ],
+  'PRIOR REWRITES (Aug 10 batch 2)': [
     'screaming-frog-review', 'rank-math-review', 'less-annoying-crm-review',
     'majestic-seo-review', 'smartlead-review',
   ],

@@ -38,7 +38,12 @@ export function formatStartingPrice(fm: PriceFields): string | null {
   if (!fm.pricingStart || fm.pricingStart <= 0) return null;
   const currency = fm.pricingCurrency ?? "$";
   const unit = fm.pricingUnit ?? "month";
-  return `${currency}${fm.pricingStart}/${unit}`;
+  // Whole numbers stay bare (49, not 49.00); anything with cents gets two
+  // decimals, so a frontmatter 118.80 renders "$118.80" rather than "$118.8".
+  const amount = Number.isInteger(fm.pricingStart)
+    ? String(fm.pricingStart)
+    : fm.pricingStart.toFixed(2);
+  return `${currency}${amount}/${unit}`;
 }
 
 const CURRENCY_CODES: Record<string, string> = {
