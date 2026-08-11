@@ -30,6 +30,10 @@ const N = 8;
 
 const GROUPS = {
   'NEW (rewritten today)': [
+    'screaming-frog-review', 'rank-math-review', 'less-annoying-crm-review',
+    'majestic-seo-review', 'smartlead-review',
+  ],
+  'PRIOR REWRITES (Aug 10 batch 1)': [
     'gohighlevel-review', 'hubspot-crm-review', 'keap-review',
     'ahrefs-review', 'buffer-review',
   ],
