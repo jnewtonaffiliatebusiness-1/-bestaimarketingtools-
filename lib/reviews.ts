@@ -55,27 +55,9 @@ export interface ReviewFrontmatter {
   pricingCurrency?: string;
 }
 
-/**
- * The single place a starting price becomes display text.
- *
- * Two failures this exists to prevent, both of which were live:
- *   1. a hardcoded "$" in front of a £ or € figure;
- *   2. "Starting at $0/month" on every tool whose entry tier is free, because
- *      pricingStart: 0 was rendered rather than treated as "no paid floor".
- *
- * Returns null when there is no meaningful starting price, so callers can omit
- * the line entirely instead of printing a zero. Callers that need prose for the
- * zero case should supply their own — see the comparison row in
- * app/reviews/[slug]/page.tsx.
- */
-export function formatStartingPrice(
-  fm: Pick<ReviewFrontmatter, "pricingStart" | "pricingUnit" | "pricingCurrency">
-): string | null {
-  if (!fm.pricingStart || fm.pricingStart <= 0) return null;
-  const currency = fm.pricingCurrency ?? "$";
-  const unit = fm.pricingUnit ?? "month";
-  return `${currency}${fm.pricingStart}/${unit}`;
-}
+// Price display helpers live in lib/pricing.ts — this module imports `fs`, and
+// client components ("use client") that import a real function from here fail
+// the build with "Module not found: Can't resolve 'fs'".
 
 export interface Review {
   frontmatter: ReviewFrontmatter;

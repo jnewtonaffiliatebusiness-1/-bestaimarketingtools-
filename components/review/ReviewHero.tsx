@@ -1,7 +1,8 @@
 import Link from "next/link";
 import StarRating from "./StarRating";
 import ProsConsList from "./ProsConsList";
-import { formatStartingPrice, type ReviewFrontmatter } from "@/lib/reviews";
+import type { ReviewFrontmatter } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 
 interface Props {
   frontmatter: ReviewFrontmatter;

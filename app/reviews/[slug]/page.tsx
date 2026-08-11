@@ -1,6 +1,7 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getReviewBySlug, getAllReviewSlugs, getReviewsByCategory, type ReviewFrontmatter } from "@/lib/reviews";
+import { formatStartingPrice, priceCurrencyCode } from "@/lib/pricing";
 import { getCategoryBySlug } from "@/lib/categories";
 import ReviewHero from "@/components/review/ReviewHero";
 import BonfireTerminalCTA from "@/components/review/BonfireTerminalCTA";
@@ -83,11 +84,20 @@ function ReviewJsonLd({ fm }: { fm: ReviewFrontmatter }) {
       "@type": "SoftwareApplication",
       name: productNameOf(fm),
       applicationCategory: "BusinessApplication",
-      offers: {
-        "@type": "Offer",
-        price: fm.pricingStart.toString(),
-        priceCurrency: "USD",
-      },
+      // The Offer is omitted entirely when there is no real starting price.
+      // It used to emit price: "0", which tells Google the software is free —
+      // false for the enterprise reviews where pricingStart: 0 means the vendor
+      // does not publish a price (brandwatch, conductor-seo, emplifi). A wrong
+      // price in a rich result is worse than no price at all.
+      ...(fm.pricingStart > 0
+        ? {
+            offers: {
+              "@type": "Offer",
+              price: fm.pricingStart.toString(),
+              priceCurrency: priceCurrencyCode(fm),
+            },
+          }
+        : {}),
     },
     datePublished: fm.datePublished,
     dateModified: fm.dateModified,
@@ -177,9 +187,12 @@ export default async function ReviewPage({ params }: Props) {
     {
       feature: "What you pay",
       product:
-        fm.pricingStart > 0
-          ? `From $${fm.pricingStart}/${fm.pricingUnit}`
-          : "Free plan available; paid tiers vary",
+        formatStartingPrice(fm)
+          ? `From ${formatStartingPrice(fm)}`
+          // Was "Free plan available; paid tiers vary" — false on the enterprise
+          // reviews where pricingStart: 0 means the vendor does not publish a
+          // price at all (brandwatch, conductor-seo, emplifi).
+          : "See the vendor’s own pricing page",
       bonfire: "$27 entry (AI Marketers Club) — includes 21-day Bonfire Terminal access",
     },
     {

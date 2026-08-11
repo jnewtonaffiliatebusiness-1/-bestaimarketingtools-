@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getReviewBySlug } from "@/lib/reviews";
+import { formatStartingPrice, priceComparable } from "@/lib/pricing";
 import StarRating from "@/components/review/StarRating";
 
 interface Props {
@@ -42,7 +43,22 @@ export default async function ComparePage({ params }: Props) {
 
   const rows = [
     { label: "Rating", a: `${a.rating}/5`, b: `${b.rating}/5`, winner: a.rating >= b.rating ? "a" : "b" },
-    { label: "Starting Price", a: `$${a.pricingStart}/${a.pricingUnit}`, b: `$${b.pricingStart}/${b.pricingUnit}`, winner: a.pricingStart <= b.pricingStart ? "a" : "b" },
+    {
+      label: "Starting Price",
+      a: formatStartingPrice(a) ?? "See site",
+      b: formatStartingPrice(b) ?? "See site",
+      // No winner unless both prices are real and in the same currency.
+      // pricingStart: 0 means "free tier" on some reviews and "price not
+      // published" on enterprise ones, and the old `a <= b` test declared the
+      // zero cheaper in both cases — crowning brandwatch over a $15 tool.
+      // Cross-currency comparison is equally meaningless without a rate.
+      winner:
+        priceComparable(a, b)
+          ? a.pricingStart <= b.pricingStart
+            ? "a"
+            : "b"
+          : null,
+    },
     { label: "Category", a: a.category.replace(/-/g, " "), b: b.category.replace(/-/g, " "), winner: null },
   ];
 
@@ -77,7 +93,9 @@ export default async function ComparePage({ params }: Props) {
             <div className="mt-4 space-y-2 text-sm">
               <p className="text-[#8a857c]">
                 <span className="text-[#55514a] font-medium">Price: </span>
-                From ${review.frontmatter.pricingStart}/{review.frontmatter.pricingUnit}
+                {formatStartingPrice(review.frontmatter)
+                  ? `From ${formatStartingPrice(review.frontmatter)}`
+                  : "See site"}
               </p>
             </div>
             <div className="mt-4 space-y-1">

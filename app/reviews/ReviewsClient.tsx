@@ -5,6 +5,7 @@ import Link from "next/link";
 import StarRating from "@/components/review/StarRating";
 import { CATEGORIES } from "@/lib/categories";
 import type { Review } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 
 interface Props {
   reviews: Review[];
@@ -95,7 +96,7 @@ export default function ReviewsClient({ reviews }: Props) {
                 {review.frontmatter.category.replace(/-/g, " ")}
               </span>
               <span className="text-xs text-[#8a857c]">
-                ${review.frontmatter.pricingStart}/{review.frontmatter.pricingUnit}
+                {formatStartingPrice(review.frontmatter) ?? "See site"}
               </span>
             </div>
             <h3 className="mb-2 text-sm font-bold leading-snug text-[#1a1a1a] group-hover:text-[#b8460f] transition">

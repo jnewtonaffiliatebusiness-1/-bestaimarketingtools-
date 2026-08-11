@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAllReviews } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 import { getCategoryBySlug } from "@/lib/categories";
 
 /**
@@ -35,7 +36,7 @@ export function GET() {
   const rows = ranked.map((r, i) => {
     const fm = r.frontmatter;
     const category = getCategoryBySlug(fm.category)?.name || fm.category;
-    const price = fm.pricingStart ? `$${fm.pricingStart}/${fm.pricingUnit}` : "See site";
+    const price = formatStartingPrice(fm) ?? "See site";
     return [
       i + 1,
       toolName(fm.title),

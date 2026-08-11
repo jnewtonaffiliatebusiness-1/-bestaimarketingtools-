@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import StarRating from "@/components/review/StarRating";
 import type { Review } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 
 interface Props {
   reviews: Review[];
@@ -85,7 +86,9 @@ export default function FeaturedReviews({ reviews }: Props) {
 
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-xs text-[#8a857c]">
-                    From ${review.frontmatter.pricingStart}/{review.frontmatter.pricingUnit}
+                    {formatStartingPrice(review.frontmatter)
+                      ? `From ${formatStartingPrice(review.frontmatter)}`
+                      : "See site"}
                   </span>
                   <span className="text-xs text-[#b8460f] group-hover:text-[#b8460f] transition">
                     Read review →

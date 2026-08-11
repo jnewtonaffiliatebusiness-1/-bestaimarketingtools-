@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getCategoryBySlug, CATEGORIES } from "@/lib/categories";
 import { getReviewsByCategory } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 import StarRating from "@/components/review/StarRating";
 
 interface Props {
@@ -111,7 +112,9 @@ export default async function CategoryPage({ params }: Props) {
             <div className="shrink-0 text-right">
               <StarRating rating={review.frontmatter.rating} size="sm" />
               <p className="mt-1 text-xs text-[#8a857c]">
-                From ${review.frontmatter.pricingStart}/{review.frontmatter.pricingUnit}
+                {formatStartingPrice(review.frontmatter)
+                  ? `From ${formatStartingPrice(review.frontmatter)}`
+                  : "See site"}
               </p>
             </div>
           </Link>

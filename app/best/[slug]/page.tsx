@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getReviewsByCategory } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 import { CATEGORIES } from "@/lib/categories";
 import StarRating from "@/components/review/StarRating";
 
@@ -113,7 +114,9 @@ export default async function BestOfPage({ params }: Props) {
                 </div>
                 <div className="flex flex-col gap-2 text-right md:shrink-0">
                   <p className="text-sm text-[#55514a]">
-                    From ${review.frontmatter.pricingStart}/{review.frontmatter.pricingUnit}
+                    {formatStartingPrice(review.frontmatter)
+                      ? `From ${formatStartingPrice(review.frontmatter)}`
+                      : "See site"}
                   </p>
                   <Link
                     href={`/reviews/${review.frontmatter.slug}`}

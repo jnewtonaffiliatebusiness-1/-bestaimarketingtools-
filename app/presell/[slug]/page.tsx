@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getReviewBySlug } from "@/lib/reviews";
+import { formatStartingPrice } from "@/lib/pricing";
 import { getMonetizedSlugs, isMonetized } from "@/lib/affiliates";
 
 /**
@@ -59,10 +60,12 @@ export default function PresellPage({ params }: { params: { slug: string } }) {
   const fm = review.frontmatter;
   const name = toolName(fm.title);
   const offerUrl = `/go/${params.slug}?src=presell`;
-  const price =
-    fm.pricingStart > 0
-      ? `$${fm.pricingStart}/${fm.pricingUnit ?? "month"}`
-      : "Free plan available";
+  // "Free plan available" is only safe here because presell pages are gated to
+  // monetized slugs (isMonetized above), a hand-curated set we have checked.
+  // Do not copy this fallback to a surface that renders every review — across
+  // the whole corpus pricingStart: 0 also means "enterprise price not
+  // published" (brandwatch, conductor-seo, emplifi), where it would be false.
+  const price = formatStartingPrice(fm) ?? "Free plan available";
 
   // Scholarly look: paper background, ink serif headings, restrained editorial accents
   // (navy #1b3a6b, ember #b8460f, gold #b07d1a). No dark/void backgrounds.
