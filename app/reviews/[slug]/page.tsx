@@ -1,6 +1,6 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
-import { getReviewBySlug, getAllReviewSlugs, getReviewsByCategory, type ReviewFrontmatter } from "@/lib/reviews";
+import { getReviewBySlug, getAllReviewSlugs, getReviewsByCategory, getRelatedReviews, type ReviewFrontmatter } from "@/lib/reviews";
 import { formatStartingPrice, priceCurrencyCode } from "@/lib/pricing";
 import { getCategoryBySlug } from "@/lib/categories";
 import ReviewHero from "@/components/review/ReviewHero";
@@ -151,9 +151,7 @@ export default async function ReviewPage({ params }: Props) {
 
   const { frontmatter: fm, content } = review;
   const category = getCategoryBySlug(fm.category);
-  const related = getReviewsByCategory(fm.category)
-    .filter((r) => r.frontmatter.slug !== fm.slug)
-    .slice(0, 6);
+  const related = getRelatedReviews(fm.category, fm.slug, 6);
 
   // Fallback comparison rows, used only if a review has none of its own.
   //
