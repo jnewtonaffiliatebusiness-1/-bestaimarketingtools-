@@ -7,9 +7,15 @@ import { CLUB, CLUB_INCLUDES, clubUrl } from "@/lib/offer";
  *
  * PLATFORM (2026-08-07): ClickBank — affiliate `jzoolu`, vendor `j1r2c`. It ran on
  * Digistore24 (product 300124) until 08-07; that link paid the FRONT END ONLY.
- * The Digistore references below are HISTORY, not the live wiring. Zero Digistore
- * links remain on the site and `scripts/affiliate_guard.js` now treats any that
- * reappear as a leak.
+ * The Digistore references below are HISTORY, not the live wiring.
+ *
+ * UPDATED 2026-08-12: Digistore was un-retired as a SECOND NETWORK ("we want
+ * both"), so it is no longer banned across the site. It remains banned for THIS
+ * product. Same product, same vendor, both networks — but Digistore pays the
+ * front end only ($17.90/buyer) against ClickBank's $20.25 + $110.25 + $447.75.
+ * `scripts/affiliate_guard.js` blocks the build if product 300124 ever appears
+ * on a Digistore link, and separately checks that any other Digistore link names
+ * our payee (JNewton) rather than a stranger's.
  *
  * WHY THIS EXISTS (2026-08-06): the affiliate link was live in 5 places on this
  * site — nav, footer, /best, /category, /compare — and every one of them threw

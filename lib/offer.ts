@@ -15,6 +15,11 @@
  * The Digistore24 link paid the FRONT END ONLY; ClickBank pays across the funnel.
  * That part is settled. The SIZE of the funnel is not — see below.
  *
+ * ⚠️ 2026-08-12: Digistore is BACK as a second network for other products
+ * ("we want both"). That does NOT reopen this decision. THIS product stays on
+ * ClickBank, and affiliate_guard.js blocks the build if product 300124 ever
+ * shows up on a Digistore link again.
+ *
  * 🚨 THE VENDOR PUBLISHES TWO DIFFERENT FUNNELS (checked 2026-08-08):
  *      affiliate portal  joinaimarketers.club/cb/affiliates/
  *          $27 + $147 + $597  ->  "earn up to $578.25 per buyer"
