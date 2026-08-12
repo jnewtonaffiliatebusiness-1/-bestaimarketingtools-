@@ -24,6 +24,7 @@ const REG = path.resolve(__dirname, '..', 'lib', 'affiliates.ts');
 const OURS = [
   'jzoolu',                                          // ClickBank / GoHighLevel fp_ref
   'sa0275305417aeb2a342c03d32dcbb6d878ce2e94f',      // Systeme.io
+  'jnewton',                                         // Digistore24 affiliate name (lowercased)
 ];
 
 // A URL carrying an affiliate/tracking identifier
@@ -80,9 +81,26 @@ if (leaks.length) {
 const CB_HOPLINK = /hop\.clickbank\.net\/?(\?[^"'`\s]+)/gi;
 const OUR_CB_AFFILIATE = 'jzoolu';
 const OUR_CB_VENDOR = 'j1r2c';
-// Any leftover Digistore club link is now a LEAK by definition — it pays the
-// front end only and bypasses the funnel commission entirely.
-const STALE_DIGISTORE = /digistore24\.com\/redir\/[^"'`\s]+/gi;
+// ─── DIGISTORE24 — RE-ENABLED 2026-08-12 on JZooLU's instruction ("we want both").
+//
+// Digistore is NO LONGER banned outright. It is a second network, for products
+// ClickBank does not carry. But "allowed" must not mean "unchecked": the reason
+// the old ban was safe is that it looked at every Digistore link. Replacing a ban
+// with nothing would hand us the exact failure this file exists to prevent —
+// a check that stops covering what it was written to cover goes quiet, it does
+// not fail. So Digistore links are now VALIDATED rather than forbidden:
+//
+//   1. The payee segment must be OUR affiliate name. Anyone else's is a leak.
+//   2. The AI Marketers Club product (300124) must NOT appear on Digistore at all.
+//      Same product, same vendor, both networks — but Digistore pays the FRONT END
+//      ONLY ($17.90/buyer) while ClickBank pays the funnel ($20.25 + $110.25 +
+//      $447.75). Routing that ONE product through Digistore is a measured loss.
+//      This is a product-specific rule, not a network-wide ban.
+//
+// URL shape: https://www.digistore24.com/redir/{PRODUCT}/{AFFILIATE}/{CAMPAIGN}
+const DIGISTORE_REDIR = /digistore24\.com\/redir\/([^/"'`\s]+)\/([^/"'`\s]+)(?:\/([^"'`\s]*))?/gi;
+const OUR_DS_AFFILIATE = 'JNewton';
+const CLUB_DS_PRODUCT = '300124';
 
 function walk(dir, acc = []) {
   const root = path.resolve(__dirname, '..', dir);
@@ -102,6 +120,7 @@ function walk(dir, acc = []) {
 function scanClickbank(files) {
   const bad = [];
   let found = 0;
+  let dsFound = 0;
   for (const file of files) {
     // Skip this file. It necessarily contains example URLs in its own comments,
     // and scanning them produced false positives on the first clean run.
@@ -126,17 +145,76 @@ function scanClickbank(files) {
       }
     }
 
-    // A surviving Digistore club link is a leak now: it pays the front end only.
-    for (const m of src.matchAll(STALE_DIGISTORE)) {
+    // Digistore links are allowed, but must pay US — and must never be the club.
+    for (const m of src.matchAll(DIGISTORE_REDIR)) {
       if (m[0].includes('${') || /\{[A-Za-z_]+\}/.test(m[0])) continue;  // doc placeholder
-      bad.push({
-        file: path.relative(path.resolve(__dirname, '..'), file),
-        url: m[0],
-        why: 'STALE Digistore24 link — pays the front end only, bypasses the funnel commission',
-      });
+      dsFound++;
+      const [, product, payee] = m;
+      if (product === CLUB_DS_PRODUCT) {
+        bad.push({
+          file: path.relative(path.resolve(__dirname, '..'), file),
+          url: m[0],
+          why: `AI Marketers Club (product ${CLUB_DS_PRODUCT}) on Digistore — pays the FRONT END ONLY ` +
+               `($17.90/buyer) and bypasses the $110.25 + $447.75 funnel commission. Use clubUrl() (ClickBank).`,
+        });
+      } else if (payee.toLowerCase() !== OUR_DS_AFFILIATE.toLowerCase()) {
+        bad.push({
+          file: path.relative(path.resolve(__dirname, '..'), file),
+          url: m[0],
+          why: `Digistore payee "${payee}" is not ours (expected "${OUR_DS_AFFILIATE}") — this pays a stranger`,
+        });
+      }
     }
   }
-  return { bad, found };
+  return { bad, found, dsFound };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTROLS —  node scripts/affiliate_guard.js --controls
+//
+// Every rule below gets a fixture that MUST trip it, plus a clean fixture that
+// must NOT trip. A rule whose control passes is dead, and a dead rule is worse
+// than no rule: it prints a reassuring "0 foreign" while protecting nothing.
+// That is exactly what happened to the Digistore path check in August.
+if (process.argv.includes('--controls')) {
+  const os = require('os');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'affguard-'));
+  const fixture = (name, body) => { const f = path.join(tmp, name); fs.writeFileSync(f, body); return f; };
+
+  const CASES = [
+    { name: 'foreign clickbank affiliate', mustTrip: true,
+      src: 'const u = "https://hop.clickbank.net/?affiliate=someoneelse&vendor=j1r2c";' },
+    { name: 'foreign clickbank vendor', mustTrip: true,
+      src: 'const u = "https://hop.clickbank.net/?affiliate=jzoolu&vendor=notours";' },
+    { name: 'our clickbank hoplink', mustTrip: false,
+      src: 'const u = "https://hop.clickbank.net/?affiliate=jzoolu&vendor=j1r2c";' },
+    { name: 'foreign digistore payee', mustTrip: true,
+      src: 'const u = "https://www.digistore24.com/redir/999888/SomeoneElse/camp";' },
+    { name: 'club product on digistore', mustTrip: true,
+      src: 'const u = "https://www.digistore24.com/redir/300124/JNewton/aitoolshub";' },
+    { name: 'our digistore link, other product', mustTrip: false,
+      src: 'const u = "https://www.digistore24.com/redir/999888/JNewton/camp";' },
+    { name: 'digistore doc placeholder', mustTrip: false,
+      src: '// https://www.digistore24.com/redir/{PRODUCT}/{AFFILIATE}/{CAMPAIGN}' },
+  ];
+
+  let dead = 0;
+  console.log('CONTROLS (each fixture must behave as marked)');
+  CASES.forEach((c, i) => {
+    const f = fixture(`case${i}.js`, c.src);
+    const { bad } = scanClickbank([f]);
+    const tripped = bad.length > 0;
+    const ok = tripped === c.mustTrip;
+    if (!ok) dead++;
+    console.log(`  ${ok ? 'ok  ' : 'DEAD'}  ${(c.mustTrip ? 'trips' : 'clean').padEnd(5)}  ${c.name}` +
+      (ok ? '' : `   <-- expected ${c.mustTrip ? 'a hit' : 'no hit'}, got ${bad.length}`));
+  });
+  fs.rmSync(tmp, { recursive: true, force: true });
+  console.log('');
+  if (dead > 0) {
+    console.error(`✗ GUARD BROKEN — ${dead} control(s) misbehaved. The rules they cover are not protecting anything.\n`);
+    process.exit(1);
+  }
 }
 
 // The constants that actually build the live URL.
@@ -158,13 +236,16 @@ if (declaredAffiliate !== OUR_CB_AFFILIATE || declaredVendor !== OUR_CB_VENDOR) 
   process.exit(1);
 }
 
-// The site must not still be building a Digistore URL anywhere.
+// lib/offer.ts builds the CLUB link specifically, and the club link must be
+// ClickBank. Digistore is allowed elsewhere on the site; it is not allowed here.
 if (/digistore24\.com\/redir\/\$\{/.test(offerSrc)) {
-  console.error('\n✗ AFFILIATE GUARD FAILED — lib/offer.ts still builds a Digistore24 redirect.\n');
+  console.error('\n✗ AFFILIATE GUARD FAILED — lib/offer.ts builds a Digistore24 redirect for the club offer.');
+  console.error('  Digistore is fine as a second network, but NOT for this product: it pays the front');
+  console.error('  end only ($17.90) against ClickBank\'s $20.25 + $110.25 + $447.75 funnel.\n');
   process.exit(1);
 }
 
-const { bad: clubLeaks, found: cbFound } = scanClickbank(walk('app').concat(
+const { bad: clubLeaks, found: cbFound, dsFound } = scanClickbank(walk('app').concat(
   walk('components'), walk('lib'), walk('scripts')
 ));
 
@@ -181,6 +262,16 @@ console.log(
 );
 console.log(
   `✓ clickbank check: affiliate "${declaredAffiliate}" / vendor "${declaredVendor}" in lib/offer.ts, ` +
-  `${cbFound} hardcoded hoplink(s) scanned, 0 foreign, 0 stale Digistore links.`
+  `${cbFound} hardcoded hoplink(s) scanned, 0 foreign.`
 );
+console.log(
+  `✓ digistore check: ${dsFound} Digistore redirect(s) scanned, 0 foreign payees, ` +
+  `0 club-product (${CLUB_DS_PRODUCT}) links. Expected payee "${OUR_DS_AFFILIATE}".`
+);
+if (dsFound === 0) {
+  console.log(
+    '  note: 0 Digistore links exist today. This check is live but currently covering nothing — ' +
+    'run `node scripts/affiliate_guard.js --controls` to confirm it still bites.'
+  );
+}
 process.exit(0);
