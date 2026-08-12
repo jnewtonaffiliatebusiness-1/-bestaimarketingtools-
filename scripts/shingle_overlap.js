@@ -30,6 +30,10 @@ const N = 8;
 
 const GROUPS = {
   'NEW (rewritten today)': [
+    'copper-crm-review', 'mailshake-review', 'woodpecker-review',
+    'omnisend-review', 'streak-crm-review',
+  ],
+  'PRIOR REWRITES (Aug 11 batch 2)': [
     'insightly-review', 'engagebay-review', 'nimble-crm-review',
     'close-crm-review', 'benchmark-email-review',
   ],
