@@ -37,6 +37,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/**
+ * Pros and cons are written as fragments without terminal punctuation ("Solo is
+ * limited to 1 user and 10,000 leads"). Reused inside a sentence they need a full
+ * stop — but only if the author did not already end with one.
+ */
+function sentence(s: string): string {
+  return /[.!?]$/.test(s.trim()) ? s.trim() : `${s.trim()}.`;
+}
+
 /** One product's column: the verdict, pros and cons from its own hand-written review. */
 function ProductPanel({ product }: { product: Product }) {
   const fm = product.review.frontmatter;
@@ -146,18 +155,31 @@ export default async function VsPage({ params }: Props) {
         asserts anything the two reviews do not already say — the page's job is to
         put them side by side, not to invent a tiebreak.
       */}
+      {/*
+        Both sentences are assembled in JS rather than interleaved with JSX text
+        nodes. Written the obvious way — {expr}. The thing that… — JSX turns the
+        newline before the full stop into a space, so all 50 pages rendered
+        "…a genuinely low entry price ." Building the string first removes the
+        whitespace question entirely.
+
+        The pro/con text is also used as written, not lower-cased into the
+        sentence: these open on tier names ("Solo at $9/user…", "Starter's 3
+        sub-accounts…") and forcing them down-case produced "solo at $9/user".
+      */}
       <section className="mb-10 rounded-2xl border border-[#e6e2da] bg-white p-6">
         <h2 className="mb-4 text-2xl font-bold text-[#1a1a1a]">Who should pick which</h2>
-        <p className="mb-4 text-[#55514a]">
-          <strong className="text-[#1a1a1a]">Pick {a.name}</strong> if this matters most to
-          you: {fa.pros[0].charAt(0).toLowerCase() + fa.pros[0].slice(1)}. The thing that most
-          often rules it out: {fa.cons[0].charAt(0).toLowerCase() + fa.cons[0].slice(1)}.
-        </p>
-        <p className="text-[#55514a]">
-          <strong className="text-[#1a1a1a]">Pick {b.name}</strong> if this matters most to
-          you: {fb.pros[0].charAt(0).toLowerCase() + fb.pros[0].slice(1)}. The thing that most
-          often rules it out: {fb.cons[0].charAt(0).toLowerCase() + fb.cons[0].slice(1)}.
-        </p>
+        {[{ p: a, f: fa }, { p: b, f: fb }].map(({ p, f }) => (
+          <div key={p.slug} className="mb-4 last:mb-0">
+            <p className="text-[#55514a]">
+              <strong className="text-[#1a1a1a]">Pick {p.name}</strong> if this is the thing that
+              matters most to you:
+            </p>
+            <p className="mt-1 text-[#55514a]">{sentence(f.pros[0])}</p>
+            <p className="mt-2 text-sm text-[#8a857c]">
+              {`What most often rules it out: ${sentence(f.cons[0])}`}
+            </p>
+          </div>
+        ))}
       </section>
 
       {/*
