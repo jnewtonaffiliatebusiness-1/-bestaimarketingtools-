@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getCategoryBySlug, CATEGORIES } from "@/lib/categories";
 import { getReviewsByCategory } from "@/lib/reviews";
 import { formatStartingPrice } from "@/lib/pricing";
+import { getPairsForCategory } from "@/lib/vs";
 import StarRating from "@/components/review/StarRating";
 
 interface Props {
@@ -31,6 +32,11 @@ export default async function CategoryPage({ params }: Props) {
   if (!category) notFound();
 
   const reviews = getReviewsByCategory(slug);
+
+  // Head-to-head pages in this category — a second inbound edge into /vs from a
+  // page Google already crawls. See getPairsForProduct() in lib/vs.ts for the
+  // measurement that made this necessary.
+  const comparisons = getPairsForCategory(slug);
 
   // Sort by rating desc
   const sorted = [...reviews].sort(
@@ -120,6 +126,33 @@ export default async function CategoryPage({ params }: Props) {
           </Link>
         ))}
       </div>
+
+      {/* Head-to-head comparisons in this category */}
+      {comparisons.length > 0 && (
+        <div className="mt-12 border-t border-[#e6e2da] pt-8">
+          <h2 className="mb-4 text-xl font-bold text-[#1a1a1a]">
+            {category.name} tools compared head-to-head
+          </h2>
+          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {comparisons.map((p) => (
+              <li key={p.slugs}>
+                <Link
+                  href={`/vs/${p.slugs}`}
+                  className="text-sm text-[#b8460f] hover:underline"
+                >
+                  {p.a.name} vs {p.b.name} →
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/vs"
+            className="mt-5 inline-block text-sm text-[#55514a] transition hover:text-[#1a1a1a]"
+          >
+            All tool comparisons →
+          </Link>
+        </div>
+      )}
 
       {/* Sponsored CTA → our own offer page.
           Previous copy claimed "thousands of marketers choose Bonfire Terminal

@@ -184,6 +184,52 @@ export function getRelatedPairs(slugs: string, category: string, limit = 6): Pai
   return [...related.slice(0, Math.min(3, limit)), ...rotated].slice(0, limit);
 }
 
+/**
+ * The comparison pages that feature a given product, for linking FROM that
+ * product's own review and category pages.
+ *
+ * THE BUG THIS FIXES — measured, not guessed.
+ * On 2026-08-17, three days after tranche 1 shipped and after the sitemap had
+ * been resubmitted and read, `gsc.js coverage /vs/` returned the same verdict
+ * for all fifty pages:
+ *
+ *     50  URL is unknown to Google      INDEXED: 0/50 (0%)
+ *
+ * "Unknown to Google" is NOT "Discovered, currently not indexed". Discovered
+ * means Google looked and declined — the authority verdict this programme was
+ * built to test. Unknown means Google never saw the page at all, so nothing has
+ * been judged and the tranche has produced no reading on authority whatsoever.
+ *
+ * The cause was structural and site-wide: `grep -rn 'href="/vs'` over app/ and
+ * components/ matched exactly one file — /vs/[slugs] linking to its own
+ * siblings. The index linked out to all 50 and each page linked to six more,
+ * but the entire component hung off a page with ZERO inbound links. A crawler
+ * entering from the homepage, a review, or a category page had no path to it,
+ * and the sitemap by itself did not carry it.
+ *
+ * ⛔ The lesson worth keeping: an internally well-linked island is still an
+ * island. Link density INSIDE a new section proves nothing; what matters is at
+ * least one edge from the part of the site Google already crawls.
+ *
+ * Review pages are the right source for that edge — they are the pages this
+ * domain already gets crawled on, and "GoHighLevel vs HubSpot CRM" from the
+ * GoHighLevel review is a topically adjacent link rather than a nav dump.
+ */
+export function getPairsForProduct(
+  slug: string,
+  limit = 8
+): { pair: Pair; other: Product }[] {
+  return getPairs()
+    .filter((p) => p.a.slug === slug || p.b.slug === slug)
+    .map((p) => ({ pair: p, other: p.a.slug === slug ? p.b : p.a }))
+    .slice(0, limit);
+}
+
+/** The comparison pages within one category, for linking from the category page. */
+export function getPairsForCategory(category: string, limit = 12): Pair[] {
+  return getPairs().filter((p) => p.category === category).slice(0, limit);
+}
+
 export interface Difference {
   label: string;
   text: string;

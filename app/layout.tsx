@@ -54,6 +54,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/category/crm-sales-automation" className="text-[#55514a] hover:text-[#1a1a1a] transition">
                 CRM
               </Link>
+              {/* /vs had NO inbound link from anywhere on the site until
+                  2026-08-17, which is why GSC reported all 50 of its pages as
+                  "URL is unknown to Google" rather than judging them. This nav
+                  entry plus the per-review block is the fix. */}
+              <Link href="/vs" className="text-[#55514a] hover:text-[#1a1a1a] transition">
+                Compare
+              </Link>
               {/* Points at our own offer page, not straight at the checkout.
                   Until 2026-08-06 this threw browsing visitors directly at a
                   third-party cart with nothing selling in between — 20 clicks
@@ -98,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <h4 className="mb-4 font-semibold text-[#1a1a1a]">Site</h4>
                 <ul className="space-y-2 text-sm text-[#55514a]">
                   <li><Link href="/reviews" className="hover:text-[#1a1a1a] transition">All Reviews</Link></li>
+                  <li><Link href="/vs" className="hover:text-[#1a1a1a] transition">Tool Comparisons</Link></li>
                   <li><Link href="/about" className="hover:text-[#1a1a1a] transition">About & Methodology</Link></li>
                   <li><Link href="/disclosure" className="hover:text-[#1a1a1a] transition">Affiliate Disclosure</Link></li>
                 </ul>

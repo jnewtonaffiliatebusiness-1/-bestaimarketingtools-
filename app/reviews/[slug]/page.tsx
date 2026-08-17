@@ -6,6 +6,7 @@ import { getCategoryBySlug } from "@/lib/categories";
 import ReviewHero from "@/components/review/ReviewHero";
 import BonfireTerminalCTA from "@/components/review/BonfireTerminalCTA";
 import EditorialTrust from "@/components/review/EditorialTrust";
+import { getPairsForProduct, productSlug } from "@/lib/vs";
 import Link from "next/link";
 
 interface Props {
@@ -153,6 +154,18 @@ export default async function ReviewPage({ params }: Props) {
   const category = getCategoryBySlug(fm.category);
   const related = getRelatedReviews(fm.category, fm.slug, 6);
 
+  // Head-to-head pages featuring this product. See getPairsForProduct() in
+  // lib/vs.ts for why this link exists: without it the entire /vs section had no
+  // inbound edge from the crawled part of the site, and all 50 pages read back
+  // "URL is unknown to Google" three days after launch.
+  //
+  // Rendered on noindexed reviews too, deliberately. Those pages carry
+  // `robots: index:false, follow:true`, so Google still crawls their links —
+  // which makes them useful as discovery paths even though they must not rank
+  // themselves. That is the opposite direction from the 2026-08-11 bug, where
+  // pages we wanted ranked were spending their links ON noindexed pages.
+  const comparisons = getPairsForProduct(productSlug(productNameOf(fm)));
+
   // Fallback comparison rows, used only if a review has none of its own.
   //
   // The previous version of this fallback asserted "100+ native integrations" and
@@ -287,6 +300,35 @@ export default async function ReviewPage({ params }: Props) {
           comparisonRows={fm.comparisonRows ?? defaultComparisonRows}
           utmCampaign={slug}
         />
+
+        {/* Head-to-head comparisons featuring this product.
+            This is the /vs section's only inbound edge from the crawled part of
+            the site — see the note on `comparisons` above. */}
+        {comparisons.length > 0 && (
+          <div className="mt-12 border-t border-[#e6e2da] pt-8">
+            <p className="mb-4 text-sm font-semibold text-[#1a1a1a]">
+              Compare {productNameOf(fm)} head-to-head:
+            </p>
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {comparisons.map(({ pair, other }) => (
+                <li key={pair.slugs}>
+                  <Link
+                    href={`/vs/${pair.slugs}`}
+                    className="text-sm text-[#b8460f] hover:underline"
+                  >
+                    {productNameOf(fm)} vs {other.name} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/vs"
+              className="mt-5 inline-block text-sm text-[#55514a] transition hover:text-[#1a1a1a]"
+            >
+              All tool comparisons →
+            </Link>
+          </div>
+        )}
 
         {/* Related reviews — internal links to sibling reviews (crawl depth + UX) */}
         {related.length > 0 && (
