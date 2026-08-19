@@ -85,6 +85,80 @@ export function clubUrl(medium: string, campaign: string): string {
   return url.toString();
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+ * SOURCE ATTRIBUTION — which REVIEW produced a sale
+ *
+ * THE HOLE THIS FILLS (found 2026-08-18):
+ * Review CTAs already linked to `/ai-marketers-club?from=<slug>`, and the offer
+ * page never read `from`. Its buttons were hardcoded `campaign="glance"` and
+ * `campaign="footer"`, so every hop reached ClickBank tagged `offerpage_glance`
+ * regardless of which page sent the visitor. The `?from=` value was captured on
+ * arrival and thrown away. ⇒ 100+ review pages, one indistinguishable tid, and
+ * no way to answer "which page earns?" — the only question that decides what to
+ * write next.
+ *
+ * 🚨 ClickBank TIDs are capped at 24 characters and allow [a-z0-9_] only. That
+ * cap is the whole design constraint: a full slug plus a placement word does not
+ * fit, so the placement is compressed to ONE character and the source gets 22.
+ *
+ * ✅ COLLISION-CHECKED, NOT ASSUMED. All 109 review slugs were truncated to 22,
+ * 20, 18 and 16 characters: zero collisions at every width (longest key is 37 —
+ * `gohighlevel_alternatives_flat_pricing` — median 9). Re-run
+ * `node scripts/tid_check.js` after adding reviews; a collision silently merges
+ * two pages' revenue, which looks like data rather than an error.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/** Placement on the offer page. One char, because the 24-cap is real. */
+const PLACEMENT_CODE: Record<string, string> = { glance: "g", footer: "f" };
+
+/** `clickbank-review` -> `clickbank`. The `-review` suffix is 7 wasted chars. */
+export function sourceKey(slug: string): string {
+  return slug
+    .replace(/-review$/, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 22);
+}
+
+/** The tid a hop carries when we know which page sent the visitor. */
+export function tidForSource(source: string, placement: string): string {
+  const code = PLACEMENT_CODE[placement] ?? placement.slice(0, 1);
+  return `${sourceKey(source)}_${code}`.slice(0, 24);
+}
+
+/**
+ * Offer-page hoplink that remembers the review it came from.
+ *
+ * `source` null/unknown ⇒ byte-identical to clubUrl("offerpage", placement), so
+ * direct visitors and no-JS clients keep the exact behaviour that is already
+ * verified working in ClickBank's TID report. This is additive only.
+ */
+export function clubUrlWithSource(source: string | null, placement: string): string {
+  if (!source) return clubUrl("offerpage", placement);
+  const url = new URL("https://hop.clickbank.net/");
+  url.searchParams.set("affiliate", CLUB_AFFILIATE_ID);
+  url.searchParams.set("vendor", CLUB_VENDOR_ID);
+  url.searchParams.set("tid", tidForSource(source, placement));
+  url.searchParams.set("utm_source", "reviewsite");
+  url.searchParams.set("utm_medium", "review");
+  url.searchParams.set("utm_campaign", sourceKey(source));
+  url.searchParams.set("utm_content", placement);
+  return url.toString();
+}
+
+/**
+ * Reverse a tid back to the review slug, for the reporting script.
+ * Returns null when the tid is not source-tagged (e.g. the old `offerpage_*`).
+ */
+export function slugFromTid(tid: string, allSlugs: string[]): string | null {
+  const m = /^(.*)_([a-z])$/.exec(tid.trim().toLowerCase());
+  if (!m) return null;
+  const key = m[1];
+  if (key === "offerpage") return null;
+  return allSlugs.find((s) => sourceKey(s) === key) ?? null;
+}
+
 /**
  * ── OFFER FACTS ─────────────────────────────────────────────────────────────
  * Every value below was read off the vendor's own live sales page and FAQ at

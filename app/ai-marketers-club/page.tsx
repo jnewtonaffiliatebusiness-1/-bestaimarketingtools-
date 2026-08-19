@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CLUB, CLUB_INCLUDES, clubUrl } from "@/lib/offer";
+import { getAllReviewSlugs } from "@/lib/reviews";
+import ClubCta from "@/components/offer/ClubCta";
 
 /**
  * The offer page for AI Marketers Club.
@@ -81,27 +83,39 @@ function OfferJsonLd() {
   );
 }
 
+/**
+ * The hop button.
+ *
+ * Was a plain <Link href={clubUrl("offerpage", campaign)}>. Every review on the
+ * site links here as `/ai-marketers-club?from=<slug>`, and that value was read
+ * by nothing — so every sale arrived in ClickBank tagged `offerpage_glance`
+ * whatever page produced it. ClubCta keeps the server-rendered href identical
+ * and upgrades it to a source-tagged tid in the browser. See lib/offer.ts.
+ */
 function CtaButton({
   campaign,
+  knownSlugs,
   children,
 }: {
   campaign: string;
+  knownSlugs: string[];
   children: React.ReactNode;
 }) {
   return (
-    <Link
-      href={clubUrl("offerpage", campaign)}
-      target="_blank"
-      rel="sponsored nofollow noopener noreferrer"
+    <ClubCta
+      placement={campaign}
+      knownSlugs={knownSlugs}
       className="inline-flex items-center gap-2 rounded-xl bg-[#b8460f] px-8 py-4 text-lg font-bold text-white transition hover:bg-[#9e3c0d] hover:shadow-lg hover:shadow-amber-500/25"
     >
       {children}
       <span aria-hidden>→</span>
-    </Link>
+    </ClubCta>
   );
 }
 
 export default function AiMarketersClubPage() {
+  // Passed to every CTA so a hostile ?from= cannot inject a tid we never published.
+  const knownSlugs = getAllReviewSlugs();
   const checkedOn = new Date(CLUB.verifiedAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -195,7 +209,7 @@ export default function AiMarketersClubPage() {
           </dl>
 
           <div className="mt-6">
-            <CtaButton campaign="glance">Join the club — ${CLUB.price}</CtaButton>
+            <CtaButton campaign="glance" knownSlugs={knownSlugs}>Join the club — ${CLUB.price}</CtaButton>
             <p className="mt-3 text-xs text-[#8a857c]">
               {CLUB.guaranteeDays}-day money-back guarantee, handled by{" "}
               {CLUB.processor}. Affiliate link.
@@ -397,7 +411,7 @@ export default function AiMarketersClubPage() {
             <span className="font-mono text-[#1a1a1a]">{CLUB.supportEmail}</span>.
             Read their refund policy before you buy, not after.
           </p>
-          <CtaButton campaign="footer">
+          <CtaButton campaign="footer" knownSlugs={knownSlugs}>
             Join the {CLUB.name} — ${CLUB.price}
           </CtaButton>
           <p className="mt-4 text-xs leading-relaxed text-[#8a857c]">
