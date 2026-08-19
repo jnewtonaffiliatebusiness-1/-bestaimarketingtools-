@@ -48,6 +48,26 @@ export const CATEGORIES: Category[] = [
     color: "#ef4444",
     productCount: 20,
   },
+  /**
+   * Added 2026-08-18. The first five categories cover tools a marketer USES;
+   * this one covers the networks a marketer GETS PAID BY, which nothing on the
+   * site addressed. The gap was found by cross-referencing the 141 integrations
+   * bonfireterminal.com publishes against our own corpus: fifteen of them are
+   * affiliate networks or tracking platforms and we had reviewed none.
+   *
+   * productCount is the SIZE OF THE GAP, not pages shipped. Every other entry
+   * here overstates the same way (20 each = 100, of which 70 are noindexed), so
+   * this number is a target, not a claim — do not render it as inventory.
+   */
+  {
+    slug: "affiliate-networks",
+    name: "Affiliate Networks & Tracking",
+    description:
+      "The marketplaces and tracking platforms that pay affiliates — what they cost, what they hold back, and how long it takes to actually get paid.",
+    icon: "🔗",
+    color: "#b8460f",
+    productCount: 15,
+  },
 ];
 
 export function getCategoryBySlug(slug: string): Category | undefined {

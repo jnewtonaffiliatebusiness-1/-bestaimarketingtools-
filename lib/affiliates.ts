@@ -120,6 +120,15 @@ export const AFFILIATE_URLS: Record<string, string> = {
   "agile-crm-review":             "https://www.agilecrm.com",
   "salesmate-review":             "https://salesmate.io",
   "folk-crm-review":              "https://www.folk.app",
+
+  // ─── Affiliate Networks & Tracking ────────────────────────────────────────
+  // ⛔ These stay BARE. A network's own hoplink carries an affiliate nickname,
+  // and dropping ours here would monetise a review of the platform we are paid
+  // through — which is the conflict the disclosure page promises we avoid.
+  // The one product we do earn on is the club, and its URL lives in lib/offer.ts.
+  "clickbank-review":             "https://www.clickbank.com",
+  "digistore24-review":           "https://www.digistore24.com",
+  "warriorplus-review":           "https://warriorplus.com",
 };
 
 export function getAffiliateUrl(slug: string): string | null {

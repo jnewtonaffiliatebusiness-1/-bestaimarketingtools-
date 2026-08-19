@@ -113,8 +113,66 @@ function ReviewJsonLd({ fm }: { fm: ReviewFrontmatter }) {
 
 // Simple markdown to HTML converter
 function mdToHtml(md: string): string {
+  // ── Tables ────────────────────────────────────────────────────────────────
+  // Added 2026-08-18. This converter had no table support, so every markdown
+  // table in every hand-written review reached the reader as raw pipes —
+  // "| Free plan | | |---|---| | Contacts | 250 |" — inside a single <p>.
+  // That was live on the BENCHMARK pages, the ones carrying the numbers the
+  // reviews are built on, and it had to be the worst-looking part of the pages
+  // we most want indexed. Runs FIRST so the paragraph splitter below never
+  // sees a pipe block.
+  //
+  // Classes are emitted inline rather than added to globals.css: this HTML goes
+  // in through dangerouslySetInnerHTML, so a `.prose-editorial table` rule would
+  // have to be written blind against markup no stylesheet author can see.
+  const cell = (s: string) => s.trim();
+  const splitRow = (line: string) =>
+    line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(cell);
+
+  const withTables = md.replace(
+    /^[ \t]*\|.*\|[ \t]*\r?\n[ \t]*\|[\s:|-]*-[\s:|-]*\|[ \t]*\r?\n(?:[ \t]*\|.*\|[ \t]*\r?\n?)*/gm,
+    (block) => {
+      const lines = block.trim().split(/\r?\n/);
+      if (lines.length < 2) return block;
+      const headers = splitRow(lines[0]);
+      const rows = lines.slice(2).map(splitRow);
+      const th = headers
+        .map(
+          (h) =>
+            `<th class="border-b-2 border-[#1a1a1a] px-3 py-2 text-left font-semibold text-[#1a1a1a]">${h}</th>`,
+        )
+        .join("");
+      const tb = rows
+        .map(
+          (r) =>
+            `<tr>${r
+              .map(
+                (c) =>
+                  `<td class="border-b border-[#e6e2da] px-3 py-2 align-top text-[#55514a]">${c}</td>`,
+              )
+              .join("")}</tr>`,
+        )
+        .join("");
+      // The wrapper scrolls instead of the page — a five-column pricing table
+      // must not force horizontal scroll on a phone.
+      return `<div class="my-6 overflow-x-auto"><table class="w-full border-collapse text-sm"><thead><tr>${th}</tr></thead><tbody>${tb}</tbody></table></div>\n`;
+    },
+  );
+
+  // ── Blockquotes ───────────────────────────────────────────────────────────
+  // Same failure as tables: "> quoted vendor policy" rendered with the ">"
+  // visible. Consecutive > lines collapse into one quote.
+  const withQuotes = withTables.replace(/((?:^>[ \t]?.*\r?\n?)+)/gm, (block) => {
+    const text = block
+      .trim()
+      .split(/\r?\n/)
+      .map((l) => l.replace(/^>[ \t]?/, ""))
+      .join(" ");
+    return `<blockquote class="my-6 border-l-4 border-[#b8460f] bg-[#f7f6f2] px-5 py-3 italic text-[#55514a]">${text}</blockquote>\n`;
+  });
+
   // Collect list items into ul blocks
-  const withLists = md.replace(/((?:^- .+\n?)+)/gm, (block) => {
+  const withLists = withQuotes.replace(/((?:^- .+\n?)+)/gm, (block) => {
     const items = block
       .trim()
       .split("\n")
@@ -132,7 +190,15 @@ function mdToHtml(md: string): string {
     .map((block) => {
       const t = block.trim();
       if (!t) return "";
-      if (t.startsWith("<h") || t.startsWith("<ul") || t.startsWith("<li")) return t;
+      if (
+        t.startsWith("<h") ||
+        t.startsWith("<ul") ||
+        t.startsWith("<li") ||
+        t.startsWith("<div") ||
+        t.startsWith("<table") ||
+        t.startsWith("<blockquote")
+      )
+        return t;
       return `<p>${t}</p>`;
     })
     .join("\n");
